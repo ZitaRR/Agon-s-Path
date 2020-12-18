@@ -1,20 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public sealed class MeleeEntity : Entity
 {
     private Transform player;
+    private Stack<Node> path = new Stack<Node>();
 
     [SerializeField]
-    private float viewDistance;
+    private Tilemap map;
     [SerializeField]
-    private float meleeRange;
+    private Transform offset;
 
     protected override void Awake()
     {
         base.Awake();
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        player = GameObject.FindGameObjectWithTag("PlayerOffset").transform;
+        
+        ASTAR.SetTilemap(map);
     }
 
     protected override void FixedUpdate()
@@ -22,48 +25,39 @@ public sealed class MeleeEntity : Entity
         base.FixedUpdate();
 
         float distance = Vector2.Distance(transform.position, player.position);
-        if (distance > meleeRange)
+        if (distance > attackRange)
             return;
-
-        Attack();
+        
+        PlayAttack();
     }
 
     protected override void Movement()
     {
-        if (rigidbody.velocity != Vector2.zero)
-        {
-            animator.SetBool("Walking", true);
-        }
-        else animator.SetBool("Walking", false);
-
-        float distance = Vector2.Distance(transform.position, player.position);
-        if (distance > viewDistance)
-        {
-            rigidbody.velocity = Vector2.zero;
+        if (Vector2.Distance(transform.position, player.position) <= viewDistance && path.Count <= 0)
+            path = ASTAR.FindPath(Vector2Int.FloorToInt(offset.position), Vector2Int.FloorToInt(player.position));
+        if (path is null || path.Count <= 0)
             return;
-        }
 
-        movement = player.position - transform.position;
-        if (Mathf.Abs(movement.x) > Mathf.Abs(movement.y))
-            movement.y = 0;
-        else movement.x = 0;
+        var pos = path.Peek().GetVectorInt() - Vector2Int.FloorToInt(offset.localPosition);
+        movement = (pos - (Vector2)transform.position).normalized;
+        transform.position = (Vector2)transform.position + movement * speed * Time.deltaTime;
 
-        rigidbody.velocity = movement.normalized * speed;
+        if (Vector2.Distance(transform.position, pos) < .1f)
+            path.Pop();
     }
 
     protected override void Attack()
     {
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
+        var hit = Physics2D.Raycast(transform.position, direction, attackRange, targetMask);
+        if (!hit)
             return;
 
-        animator.Play("Attack");
-    }
+        var t = hit.collider.transform;
+        var entity = t.GetComponent<IDamagable>();
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, viewDistance);
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, meleeRange);
+        if (entity is null)
+            return;
+
+        entity.Damage(10, direction);
     }
 }

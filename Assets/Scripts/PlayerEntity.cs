@@ -1,13 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public sealed class PlayerEntity : Entity
 {
     private void Update()
     {
         if (Input.GetKeyUp(KeyCode.Mouse0))
-            Attack();
+            PlayAttack();
     }
 
     protected override void Movement()
@@ -23,6 +22,9 @@ public sealed class PlayerEntity : Entity
         rigidbody.velocity = movement.normalized * speed;
 
         if (rigidbody.velocity != Vector2.zero)
+            direction = rigidbody.velocity.normalized;
+
+        if (rigidbody.velocity != Vector2.zero)
         {
             animator.SetBool("Walking", true);
         }
@@ -31,9 +33,16 @@ public sealed class PlayerEntity : Entity
 
     protected override void Attack()
     {
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
+        var hit = Physics2D.Raycast(transform.position, direction, attackRange, targetMask);
+        if (!hit)
             return;
 
-        animator.Play("Attack");
+        var t = hit.collider.transform;
+        var entity = t.GetComponent<IDamagable>();
+
+        if (entity is null)
+            return;
+
+        entity.Damage(10, direction);
     }
 }
