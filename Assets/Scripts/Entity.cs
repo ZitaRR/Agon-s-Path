@@ -1,7 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
@@ -14,7 +12,7 @@ public abstract class Entity : MonoBehaviour, IDamagable
         set
         {
             health = value;
-            if (health <=0)
+            if (health <= 0)
                 Kill();
         }
     }
@@ -75,6 +73,13 @@ public abstract class Entity : MonoBehaviour, IDamagable
     {
         Health -= damage;
         rigidbody.AddForce(direction * 40f, ForceMode2D.Force);
+    }
+
+    public IEnumerator DamageEffect()
+    {
+        renderer.material.color = Color.red;
+        yield return new WaitForSeconds(.3f);
+        renderer.material.color = new Color();
     }
 
     public void Kill()
