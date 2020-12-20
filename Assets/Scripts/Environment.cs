@@ -5,17 +5,20 @@ public class Environment : MonoBehaviour
 {
     public const float DAY_LENGTH = 24;
 
-    public bool IsDay => time >= dayStart && time < nightStart;
+    public float Time { get; set; }
+    public bool IsDay => Time >= dayStart && Time < nightStart;
 
     private Light sun;
     private ParticleSystem weather;
     private MainModule main;
-    private float time;
     private float sunIntensity;
     private float duration;
     private float cooldown;
 
     [Header("Time Settings")]
+    [SerializeField]
+    [Range(0, 24)]
+    private float start;
     [SerializeField]
     private float timeMultiplier = 1;
     [SerializeField]
@@ -24,8 +27,6 @@ public class Environment : MonoBehaviour
     private float nightStart = 18;
 
     [Header("Weather Settings")]
-    [SerializeField]
-    private float intensity;
     [SerializeField]
     private float durationMulitplier;
     [SerializeField]
@@ -40,36 +41,47 @@ public class Environment : MonoBehaviour
         main = weather.main;
     }
 
+    private void Start()
+    {
+        Time = start;
+    }
+
     private void FixedUpdate()
     {
         main.simulationSpeed = timeMultiplier;
 
         var tick = TimeIncrement();
-        time += tick;
+        Time += tick;
         
-        if (time >= DAY_LENGTH)
-            time = 0;
-        
-        UpdateSun();
+        if (Time >= DAY_LENGTH)
+            Time = 0;
+
+        UpdateSun(tick);
         UpdateWeather(tick);
     }
 
-    private void UpdateSun()
+    private void UpdateSun(float time)
     {
-        if (IsDay)
+        switch (Time)
         {
-            sunIntensity += TimeIncrement();
-            if (sunIntensity > 1)
+            case float t when (t >= dayStart + 1 && t < nightStart):
                 sunIntensity = 1;
-            sun.intensity = sunIntensity;
-        }
-        else
-        {
-            sunIntensity -= TimeIncrement();
-            if (sunIntensity < 0)
+                break;
+            case float t when (t >= nightStart + 1 || t < dayStart):
                 sunIntensity = 0;
-            sun.intensity = sunIntensity;
+                break;
+            default:
+                time = IsDay ? time : -time;
+                sunIntensity += time;
+                break;
         }
+
+        if (sunIntensity > 1)
+            sunIntensity = 1;
+        else if (sunIntensity < 0)
+            sunIntensity = 0;
+
+        sun.intensity = sunIntensity;
     }
 
     private void UpdateWeather(float time)
@@ -80,7 +92,7 @@ public class Environment : MonoBehaviour
         cooldown -= time > cooldown ? cooldown : time;
         if (cooldown > 0)
             return;
-        if (Random.value * 100 > frequence)
+        if (Random.value * 1000 > frequence)
             return;
 
         duration = Random.value * durationMulitplier;
@@ -90,5 +102,5 @@ public class Environment : MonoBehaviour
     }
 
     private float TimeIncrement()
-        => Time.deltaTime * timeMultiplier / DAY_LENGTH;
+        => UnityEngine.Time.deltaTime * timeMultiplier / DAY_LENGTH;
 }
