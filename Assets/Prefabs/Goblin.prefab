@@ -104,7 +104,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 9
   m_Sprite: {fileID: -27495883366763839, guid: d643fd7d44b04e4459e2f2ebcd4244f6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -196,7 +196,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 2
   health: 100
-  viewDistance: 8
+  viewDistance: 4
   attackRange: 2
   targetMask:
     serializedVersion: 2

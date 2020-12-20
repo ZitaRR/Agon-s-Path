@@ -3,6 +3,8 @@
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+    public Environment Environment { get; private set; }
+    public PlayerEntity Player { get; private set; }
 
     private void Awake()
     {
@@ -11,5 +13,8 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        Environment = GetComponent<Environment>();
+        Player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerEntity>();
     }
 }

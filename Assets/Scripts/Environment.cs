@@ -6,19 +6,20 @@ public class Environment : MonoBehaviour
     public const float DAY_LENGTH = 24;
 
     public float Time { get; set; }
+    public float LightIntensity { get; private set; } = 1;
     public bool IsDay => Time >= dayStart && Time < nightStart;
 
     private Light sun;
+    private Light player;
     private ParticleSystem weather;
     private MainModule main;
-    private float sunIntensity;
     private float duration;
     private float cooldown;
 
     [Header("Time Settings")]
     [SerializeField]
     [Range(0, 24)]
-    private float start;
+    private float start = 12;
     [SerializeField]
     private float timeMultiplier = 1;
     [SerializeField]
@@ -28,7 +29,7 @@ public class Environment : MonoBehaviour
 
     [Header("Weather Settings")]
     [SerializeField]
-    private float durationMulitplier;
+    private float durationMulitplier = 4;
     [SerializeField]
     private float frequence = .1f;
     [SerializeField]
@@ -44,6 +45,7 @@ public class Environment : MonoBehaviour
     private void Start()
     {
         Time = start;
+        player = GameManager.Instance.Player.transform.GetComponentInChildren<Light>();
     }
 
     private void FixedUpdate()
@@ -56,40 +58,25 @@ public class Environment : MonoBehaviour
         if (Time >= DAY_LENGTH)
             Time = 0;
 
-        UpdateSun(tick);
+        UpdateLight();
         UpdateWeather(tick);
     }
 
-    private void UpdateSun(float time)
+    private void UpdateLight()
     {
-        switch (Time)
-        {
-            case float t when (t >= dayStart + 1 && t < nightStart):
-                sunIntensity = 1;
-                break;
-            case float t when (t >= nightStart + 1 || t < dayStart):
-                sunIntensity = 0;
-                break;
-            default:
-                time = IsDay ? time : -time;
-                sunIntensity += time;
-                break;
-        }
+        var light = IsDay ? Time - dayStart : Time - nightStart;
+        LightIntensity = Mathf.Clamp(light, 0, 1);
 
-        if (sunIntensity > 1)
-            sunIntensity = 1;
-        else if (sunIntensity < 0)
-            sunIntensity = 0;
-
-        sun.intensity = sunIntensity;
+        sun.intensity = LightIntensity;
+        player.intensity = -LightIntensity + .5f;
     }
 
-    private void UpdateWeather(float time)
+    private void UpdateWeather(float tick)
     {
-        duration -= time > duration ? duration : time;
+        duration -= tick > duration ? duration : tick;
         if (duration > 0)
             return;
-        cooldown -= time > cooldown ? cooldown : time;
+        cooldown -= tick > cooldown ? cooldown : tick;
         if (cooldown > 0)
             return;
         if (Random.value * 1000 > frequence)

@@ -16,10 +16,13 @@ public abstract class Entity : MonoBehaviour, IDamagable
                 Kill();
         }
     }
+    public float ViewDistance { get => viewDistance; }
 
     protected new Rigidbody2D rigidbody;
     protected new SpriteRenderer renderer;
     protected Animator animator;
+    protected GameManager game;
+    protected PlayerEntity player;
     protected Vector2 movement;
     protected Vector2 direction;
     protected Vector2Int position;
@@ -42,11 +45,36 @@ public abstract class Entity : MonoBehaviour, IDamagable
         animator = GetComponent<Animator>();
     }
 
+    protected virtual void Start()
+    {
+        game = GameManager.Instance;
+        player = game.Player;
+    }
+
     protected virtual void FixedUpdate()
     {
         position = Vector2Int.FloorToInt(transform.position);
         Movement();
         Rotation();
+        SetAlpha();
+    }
+
+    //This should be moved into a base class for NPC's/AI
+    private void SetAlpha()
+    {
+        if (this is PlayerEntity)
+            return;
+
+        var distance = Vector2.Distance(transform.position, player.transform.position);
+        if (distance > player.viewDistance)
+        {
+            var light = Mathf.Clamp(game.Environment.LightIntensity * 4, 0, 1);
+            renderer.material.color = new Color(1, 1, 1, light);
+            return;
+        }
+
+        var alpha = Mathf.Clamp(player.viewDistance - distance, 0, 1);
+        renderer.material.color = new Color(1, 1, 1, alpha);
     }
 
     private void Rotation()

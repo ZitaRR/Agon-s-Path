@@ -3,8 +3,17 @@ using UnityEngine.UI;
 
 public sealed class PlayerEntity : Entity
 {
+    private new Light light;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        light = GetComponentInChildren<Light>();
+    }
+
     private void Update()
     {
+        light.spotAngle = viewDistance;
         if (Input.GetKeyUp(KeyCode.Mouse0))
             PlayAttack();
     }

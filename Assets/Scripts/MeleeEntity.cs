@@ -4,7 +4,7 @@ using UnityEngine.Tilemaps;
 
 public sealed class MeleeEntity : Entity
 {
-    private Transform player;
+    private Transform playerOffset;
     private Stack<Node> path = new Stack<Node>();
 
     [SerializeField]
@@ -15,16 +15,20 @@ public sealed class MeleeEntity : Entity
     protected override void Awake()
     {
         base.Awake();
-        player = GameObject.FindGameObjectWithTag("PlayerOffset").transform;
-        
         ASTAR.SetTilemap(map);
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+        playerOffset = player.transform.GetChild(0);
     }
 
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
 
-        float distance = Vector2.Distance(transform.position, player.position);
+        float distance = Vector2.Distance(transform.position, playerOffset.position);
         if (distance > attackRange)
             return;
         
@@ -33,8 +37,8 @@ public sealed class MeleeEntity : Entity
 
     protected override void Movement()
     {
-        if (Vector2.Distance(transform.position, player.position) <= viewDistance && path.Count <= 0)
-            path = ASTAR.FindPath(Vector2Int.FloorToInt(offset.position), Vector2Int.FloorToInt(player.position));
+        if (Vector2.Distance(transform.position, playerOffset.position) <= viewDistance && path.Count <= 0)
+            path = ASTAR.FindPath(Vector2Int.FloorToInt(offset.position), Vector2Int.FloorToInt(playerOffset.position));
         if (path is null || path.Count <= 0)
             return;
 
