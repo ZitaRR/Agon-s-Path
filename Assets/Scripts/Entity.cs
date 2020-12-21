@@ -65,14 +65,14 @@ public abstract class Entity : MonoBehaviour, IDamagable
         if (this is PlayerEntity)
             return;
 
-        var distance = Vector2.Distance(transform.position, player.transform.position);
-        if (distance > player.viewDistance)
+        if (game.Environment.IsDay)
         {
-            var light = Mathf.Clamp(game.Environment.LightIntensity * 4, 0, 1);
+            var light = game.Environment.LightIntensity;
             renderer.material.color = new Color(1, 1, 1, light);
             return;
         }
 
+        var distance = Vector2.Distance(transform.position, player.transform.position);
         var alpha = Mathf.Clamp(player.viewDistance - distance, 0, 1);
         renderer.material.color = new Color(1, 1, 1, alpha);
     }

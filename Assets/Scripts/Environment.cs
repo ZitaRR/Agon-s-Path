@@ -64,7 +64,8 @@ public class Environment : MonoBehaviour
 
     private void UpdateLight()
     {
-        var light = IsDay ? Time - dayStart : Time - nightStart;
+        var light = IsDay ? Time - dayStart : 
+            Time < dayStart ? Time - nightStart : -Time + (nightStart + 1);
         LightIntensity = Mathf.Clamp(light, 0, 1);
 
         sun.intensity = LightIntensity;
