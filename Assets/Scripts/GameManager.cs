@@ -4,9 +4,21 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public enum GameState
+    {
+        Menu,
+        Idle,
+        Combat,
+        Paused
+    }
+
+    public delegate void StateDelegate(GameState state);
+    public static event StateDelegate OnStateChange;
+
     public static GameManager Instance { get; private set; }
-    public Environment Environment { get; private set; }
-    public PlayerEntity Player => player.GetComponent<PlayerEntity>();
+    public static Environment Environment { get; private set; }
+    public static PlayerEntity Player => Instance.player.GetComponent<PlayerEntity>();
+    public static GameState State { get; private set; }
 
     [SerializeField]
     private GameObject player;
@@ -22,6 +34,12 @@ public class GameManager : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
+    public static void SetState(GameState state)
+    {
+        State = state;
+        OnStateChange?.Invoke(state);
+    }
+
     public void LoadScene(string name)
         => SceneLoader.LoadScene(name);
 
@@ -31,6 +49,7 @@ public class GameManager : MonoBehaviour
             return;
 
         Environment = gameObject.AddComponent<Environment>();
+        SetState(GameState.Idle);
         player = Instantiate(player, new Vector2(0, -3), Quaternion.identity);
     }
 }

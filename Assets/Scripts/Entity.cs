@@ -21,7 +21,6 @@ public abstract class Entity : MonoBehaviour, IDamagable
     protected new Rigidbody2D rigidbody;
     protected new SpriteRenderer renderer;
     protected Animator animator;
-    protected GameManager game;
     protected PlayerEntity player;
     protected Vector2 movement;
     protected Vector2 direction;
@@ -48,8 +47,7 @@ public abstract class Entity : MonoBehaviour, IDamagable
 
     protected virtual void Start()
     {
-        game = GameManager.Instance;
-        player = game.Player;
+        player = GameManager.Player;
         color = renderer.material.color;
     }
 
@@ -67,8 +65,8 @@ public abstract class Entity : MonoBehaviour, IDamagable
         if (this is PlayerEntity)
             return;
 
-        var alpha = game.Environment.LightIntensity;
-        if (game.Environment.IsDay)
+        var alpha = GameManager.Environment.LightIntensity;
+        if (GameManager.Environment.IsDay)
         {
             renderer.material.color = new Color(color.r, color.g, color.b, alpha);
             return;

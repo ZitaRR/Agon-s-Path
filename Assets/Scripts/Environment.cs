@@ -45,7 +45,7 @@ public class Environment : MonoBehaviour
     private void Start()
     {
         Time = start;
-        player = GameManager.Instance.Player.transform.GetComponentInChildren<Light>();
+        player = GameManager.Player.transform.GetComponentInChildren<Light>();
     }
 
     private void FixedUpdate()
