@@ -15,6 +15,7 @@ public sealed class SceneLoader : MonoBehaviour
         "Are you having trouble staying alive? Just stop dying",
         "Health potions is an excellent choice when you're in a rough spot, if you're shit that is",
         "Enemies too tough? Come back when you got better gear or ride it out like a real man",
+        "You better not be here because you died"
     };
 
     [SerializeField]

@@ -17,6 +17,7 @@ public abstract class Entity : MonoBehaviour, IDamagable
         }
     }
     public float ViewDistance { get => viewDistance; }
+    public int ID { get; private set; }
 
     protected new Rigidbody2D rigidbody;
     protected new SpriteRenderer renderer;
@@ -26,6 +27,7 @@ public abstract class Entity : MonoBehaviour, IDamagable
     protected Vector2 direction;
     protected Vector2Int position;
     protected Color color;
+    private static int entities = 0;
 
     [SerializeField]
     protected float speed;
@@ -43,6 +45,8 @@ public abstract class Entity : MonoBehaviour, IDamagable
         rigidbody = GetComponent<Rigidbody2D>();
         renderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+
+        ID = entities++;
     }
 
     protected virtual void Start()
@@ -51,7 +55,7 @@ public abstract class Entity : MonoBehaviour, IDamagable
         color = renderer.material.color;
     }
 
-    protected virtual void FixedUpdate()
+    protected virtual void Update()
     {
         position = Vector2Int.FloorToInt(transform.position);
         Movement();
@@ -77,7 +81,7 @@ public abstract class Entity : MonoBehaviour, IDamagable
         renderer.material.color = new Color(color.r, color.g, color.b, alpha);
     }
 
-    private void Rotation()
+    protected virtual void Rotation()
     {
         if (movement.x > 0)
             renderer.flipX = false;
@@ -119,7 +123,10 @@ public abstract class Entity : MonoBehaviour, IDamagable
     }
 
     public void Kill()
-        => Destroy(gameObject);
+    {
+        CombatSystem.RemoveCombatant(this);
+        Destroy(gameObject);
+    }
 
     private void OnDrawGizmos()
     {

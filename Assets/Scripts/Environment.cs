@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using static UnityEngine.ParticleSystem;
 
-public class Environment : MonoBehaviour
+public sealed class Environment : MonoBehaviour
 {
     public const float DAY_LENGTH = 24;
 

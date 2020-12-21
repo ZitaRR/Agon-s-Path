@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Node
+public sealed class Node
 {
     public Node Parent { get; set; }
     public float X { get; set; }

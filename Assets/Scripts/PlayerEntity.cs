@@ -11,8 +11,9 @@ public sealed class PlayerEntity : Entity
         light = GetComponentInChildren<Light>();
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         light.spotAngle = viewDistance;
         if (Input.GetKeyUp(KeyCode.Mouse0))
             PlayAttack();
@@ -30,7 +31,7 @@ public sealed class PlayerEntity : Entity
         movement = new Vector2(x, y).normalized;
         transform.position += (Vector3)movement * speed * Time.deltaTime;
 
-        if (movement != Vector2.zero)
+        if (movement != Vector2.zero && !CombatSystem.InCombat)
             direction = movement;
 
         if (movement != Vector2.zero)
@@ -40,9 +41,27 @@ public sealed class PlayerEntity : Entity
         else animator.SetBool("Walking", false);
     }
 
+    protected override void Rotation()
+    {
+        if (!CombatSystem.InCombat)
+        {
+            base.Rotation();
+            return;
+        }
+
+        var mouse = CameraBehaviour.Camera.ScreenToWorldPoint(Input.mousePosition);
+        if (transform.position.x > mouse.x)
+            renderer.flipX = true;
+        else if (transform.position.x < mouse.x)
+            renderer.flipX = false;
+
+        direction = mouse - transform.position;
+    }
+
     protected override void Attack()
     {
         var hit = Physics2D.Raycast(transform.position, direction, attackRange, targetMask);
+        print(hit.collider.name);
         if (!hit)
             return;
 

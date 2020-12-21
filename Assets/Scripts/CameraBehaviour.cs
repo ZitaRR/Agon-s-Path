@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraBehaviour : MonoBehaviour
+public sealed class CameraBehaviour : MonoBehaviour
 {
     public static Camera Camera { get; private set; }
 
@@ -39,6 +39,15 @@ public class CameraBehaviour : MonoBehaviour
         Camera.transform.position = Vector3.Lerp(Camera.transform.position, target, transitionSmoothening * Time.deltaTime);
     }
 
+    private void Combat()
+    {
+        var entites = CombatSystem.GetPositions();
+        entites.Add(player.position);
+        var centroid = entites.GetCentroid();
+        target = new Vector3(centroid.x, centroid.y, Camera.transform.position.z);
+        Camera.transform.position = Vector3.Lerp(Camera.transform.position, target, transitionSmoothening * Time.deltaTime);
+    }
+
     private void Mouse()
     {
         Vector3 midPoint = (player.position + Camera.ScreenToWorldPoint(Input.mousePosition)) / 2;
@@ -51,6 +60,9 @@ public class CameraBehaviour : MonoBehaviour
     {
         switch (state)
         {
+            case GameManager.GameState.Combat:
+                behaviour = Roaming;
+                break;
             case GameManager.GameState.Idle:
                 behaviour = Roaming;
                 break;

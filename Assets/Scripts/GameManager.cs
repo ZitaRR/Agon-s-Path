@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public sealed class GameManager : MonoBehaviour
 {
     public enum GameState
     {
@@ -51,5 +52,16 @@ public class GameManager : MonoBehaviour
         Environment = gameObject.AddComponent<Environment>();
         SetState(GameState.Idle);
         player = Instantiate(player, new Vector2(0, -3), Quaternion.identity);
+    }
+}
+
+static class Extensions
+{
+    public static Vector2 GetCentroid(this List<Vector2> positions)
+    {
+        var centroid = new Vector2(0, 0);
+        foreach (var pos in positions)
+            centroid += pos;
+        return centroid / positions.Count;
     }
 }
