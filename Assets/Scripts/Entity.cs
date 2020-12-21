@@ -26,6 +26,7 @@ public abstract class Entity : MonoBehaviour, IDamagable
     protected Vector2 movement;
     protected Vector2 direction;
     protected Vector2Int position;
+    protected Color color;
 
     [SerializeField]
     protected float speed;
@@ -49,6 +50,7 @@ public abstract class Entity : MonoBehaviour, IDamagable
     {
         game = GameManager.Instance;
         player = game.Player;
+        color = renderer.material.color;
     }
 
     protected virtual void FixedUpdate()
@@ -65,16 +67,16 @@ public abstract class Entity : MonoBehaviour, IDamagable
         if (this is PlayerEntity)
             return;
 
+        var alpha = game.Environment.LightIntensity;
         if (game.Environment.IsDay)
         {
-            var light = game.Environment.LightIntensity;
-            renderer.material.color = new Color(1, 1, 1, light);
+            renderer.material.color = new Color(color.r, color.g, color.b, alpha);
             return;
         }
 
         var distance = Vector2.Distance(transform.position, player.transform.position);
-        var alpha = Mathf.Clamp(player.viewDistance - distance, 0, 1);
-        renderer.material.color = new Color(1, 1, 1, alpha);
+        alpha = Mathf.Clamp(player.viewDistance - distance, 0, 1);
+        renderer.material.color = new Color(color.r, color.g, color.b, alpha);
     }
 
     private void Rotation()
@@ -97,17 +99,25 @@ public abstract class Entity : MonoBehaviour, IDamagable
 
     protected abstract void Attack();
 
-    public void Damage(int damage, Vector2 direction)
+    public IEnumerator Damage(int damage, Vector2 direction)
     {
         Health -= damage;
-        rigidbody.AddForce(direction * 40f, ForceMode2D.Force);
+        StartCoroutine(DamageEffect());
+
+        float time = 0;
+        while (time < .1f)
+        {
+            transform.position += (Vector3)direction.normalized * 13 * Time.deltaTime;
+            time += Time.deltaTime;
+            yield return null;
+        }
     }
 
     public IEnumerator DamageEffect()
     {
-        renderer.material.color = Color.red;
-        yield return new WaitForSeconds(.3f);
-        renderer.material.color = new Color();
+        color = Color.red;
+        yield return new WaitForSeconds(.1f);
+        color = new Color(1, 1, 1);
     }
 
     public void Kill()

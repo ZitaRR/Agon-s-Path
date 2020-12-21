@@ -27,13 +27,13 @@ public sealed class PlayerEntity : Entity
             y = 0;
         else x = 0;
 
-        movement = new Vector2(x, y);
-        rigidbody.velocity = movement.normalized * speed;
+        movement = new Vector2(x, y).normalized;
+        transform.position += (Vector3)movement * speed * Time.deltaTime;
 
-        if (rigidbody.velocity != Vector2.zero)
-            direction = rigidbody.velocity.normalized;
+        if (movement != Vector2.zero)
+            direction = movement;
 
-        if (rigidbody.velocity != Vector2.zero)
+        if (movement != Vector2.zero)
         {
             animator.SetBool("Walking", true);
         }
@@ -49,9 +49,9 @@ public sealed class PlayerEntity : Entity
         var t = hit.collider.transform;
         var entity = t.GetComponent<IDamagable>();
 
-        if (entity is null)
+        if (entity is null || entity is PlayerEntity)
             return;
 
-        entity.Damage(10, direction);
+        StartCoroutine(entity.Damage(10, direction));
     }
 }

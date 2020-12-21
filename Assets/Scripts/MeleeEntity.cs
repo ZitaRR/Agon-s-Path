@@ -44,7 +44,7 @@ public sealed class MeleeEntity : Entity
 
         var pos = path.Peek().GetVectorInt() - Vector2Int.FloorToInt(offset.localPosition);
         movement = (pos - (Vector2)transform.position).normalized;
-        transform.position = (Vector2)transform.position + movement * speed * Time.deltaTime;
+        transform.position += (Vector3)movement * speed * Time.deltaTime;
 
         if (Vector2.Distance(transform.position, pos) < .1f)
             path.Pop();

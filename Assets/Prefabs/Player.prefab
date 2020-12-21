@@ -103,7 +103,7 @@ GameObject:
   - component: {fileID: 593957172616817923}
   - component: {fileID: 593957172616817920}
   - component: {fileID: 593957172616817921}
-  - component: {fileID: 593957172616817949}
+  - component: {fileID: 6309563329793805594}
   - component: {fileID: 3815280041899427745}
   - component: {fileID: 7053615802004448082}
   - component: {fileID: 593957172616817922}
@@ -200,7 +200,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!50 &593957172616817949
+--- !u!50 &6309563329793805594
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
@@ -220,7 +220,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 0
 --- !u!61 &3815280041899427745
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -278,7 +278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 963e923fb4d97a840a5aa7530f119857, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 4
+  speed: 3.5
   health: 100
   viewDistance: 8
   attackRange: 4

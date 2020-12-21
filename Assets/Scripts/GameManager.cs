@@ -31,6 +31,6 @@ public class GameManager : MonoBehaviour
             return;
 
         Environment = gameObject.AddComponent<Environment>();
-        player = Instantiate(player, new Vector2(8, 8), Quaternion.identity);
+        player = Instantiate(player, new Vector2(0, -3), Quaternion.identity);
     }
 }
