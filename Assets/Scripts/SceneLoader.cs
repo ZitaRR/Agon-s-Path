@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -10,33 +9,56 @@ public sealed class SceneLoader : MonoBehaviour
 
     private AsyncOperation loading;
     private CanvasGroup group;
+    private readonly string[] messages =
+    {
+        "You can move using W, A, S, D - if you did not know this, perhaps you should uninstall",
+        "Are you having trouble staying alive? Just stop dying",
+        "Health potions is an excellent choice when you're in a rough spot, if you're shit that is",
+        "Enemies too tough? Come back when you got better gear or ride it out like a real man",
+    };
 
     [SerializeField]
     private Text loadingText;
+    [SerializeField]
+    private Text loadingMessage;
     [SerializeField]
     private Slider loadingBar;
 
     private void Awake()
     {
         group = GetComponent<CanvasGroup>();
+        group.alpha = 0;
     }
 
     private void Start()
     {
+        int index = Random.Range(0, messages.Length);
+        loadingMessage.text = messages[index];
         StartCoroutine(Load());
+
     }
 
     private IEnumerator Load()
     {
-        yield return StartCoroutine(SetAlpha(1, 1));
+        yield return StartCoroutine(SetAlpha(1, .5f));
         loading = SceneManager.LoadSceneAsync(SceneName);
+        loading.allowSceneActivation = false;
         while (!loading.isDone)
         {
-            loadingText.text = $"Loading {loading.progress * 100:00}%";
-            loadingBar.value = loading.progress * 100;
+            var percentage = (loading.progress + .1f) * 100;
+            loadingText.text = $"Loading {percentage}%";
+            loadingBar.value = percentage;
+            if (percentage >= 100)
+                break;
             yield return null;
         }
-        yield return StartCoroutine(SetAlpha(0, 1));
+        yield return StartCoroutine(Unload());
+    }
+
+    private IEnumerator Unload()
+    {
+        yield return StartCoroutine(SetAlpha(0, .5f));
+        loading.allowSceneActivation = true;
     }
 
     private IEnumerator SetAlpha(float alpha, float duration)
