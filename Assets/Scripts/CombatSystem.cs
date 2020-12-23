@@ -24,7 +24,6 @@ public static class CombatSystem
         if (!InCombat)
             GameManager.SetState(GameManager.GameState.Combat);
 
-        Debug.Log("Added " + entity.name);
         Entities.Add(entity);
     }
 
@@ -33,7 +32,6 @@ public static class CombatSystem
         if (!Exists(entity))
             return;
 
-        Debug.Log("Removed " + entity.name);
         Entities.Remove(entity);
         if (InCombat)
             GameManager.SetState(GameManager.GameState.Idle);

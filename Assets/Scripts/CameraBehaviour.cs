@@ -61,7 +61,7 @@ public sealed class CameraBehaviour : MonoBehaviour
         switch (state)
         {
             case GameManager.GameState.Combat:
-                behaviour = Roaming;
+                behaviour = Combat;
                 break;
             case GameManager.GameState.Idle:
                 behaviour = Roaming;

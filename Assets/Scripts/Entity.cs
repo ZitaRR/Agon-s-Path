@@ -66,15 +66,15 @@ public abstract class Entity : MonoBehaviour, IDamagable
     //This should be moved into a base class for NPC's/AI
     private void SetAlpha()
     {
-        if (this is PlayerEntity)
-            return;
-
         var alpha = GameManager.Environment.LightIntensity;
         if (GameManager.Environment.IsDay)
         {
             renderer.material.color = new Color(color.r, color.g, color.b, alpha);
             return;
         }
+
+        if (this is PlayerEntity)
+            return;
 
         var distance = Vector2.Distance(transform.position, player.transform.position);
         alpha = Mathf.Clamp(player.viewDistance - distance, 0, 1);

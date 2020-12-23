@@ -61,7 +61,6 @@ public sealed class PlayerEntity : Entity
     protected override void Attack()
     {
         var hit = Physics2D.Raycast(transform.position, direction, attackRange, targetMask);
-        print(hit.collider.name);
         if (!hit)
             return;
 

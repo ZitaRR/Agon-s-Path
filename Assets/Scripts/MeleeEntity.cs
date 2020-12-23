@@ -58,16 +58,6 @@ public sealed class MeleeEntity : Entity
 
     protected override void Attack()
     {
-        var hit = Physics2D.Raycast(transform.position, direction, attackRange, targetMask);
-        if (!hit)
-            return;
-
-        var t = hit.collider.transform;
-        var entity = t.GetComponent<IDamagable>();
-
-        if (entity is null)
-            return;
-
-        entity.Damage(10, direction);
+        StartCoroutine(player.Damage(10, direction));
     }
 }
