@@ -7,21 +7,17 @@ public sealed class MeleeEntity : Entity
     private Transform playerOffset;
     private Stack<Node> path = new Stack<Node>();
 
-    [SerializeField]
-    private Tilemap map;
-    [SerializeField]
-    private Transform offset;
-
     protected override void Awake()
     {
         base.Awake();
+        Tilemap map = GameObject.Find("Walkable").GetComponent<Tilemap>();
         ASTAR.SetTilemap(map);
     }
 
     protected override void Start()
     {
         base.Start();
-        playerOffset = player.transform.GetChild(0);
+        playerOffset = player.Offset;
     }
 
     protected override void Update()
@@ -39,7 +35,7 @@ public sealed class MeleeEntity : Entity
     {
         if (Vector2.Distance(transform.position, playerOffset.position) <= viewDistance && path.Count <= 0)
         {
-            path = ASTAR.FindPath(Vector2Int.FloorToInt(offset.position), Vector2Int.FloorToInt(playerOffset.position));
+            path = ASTAR.FindPath(Vector2Int.FloorToInt(Offset.position), Vector2Int.FloorToInt(playerOffset.position));
             CombatSystem.AddCombatant(this);
         }
         if (path is null || path.Count <= 0)
@@ -48,7 +44,7 @@ public sealed class MeleeEntity : Entity
             return;
         }
 
-        var pos = path.Peek().GetVectorInt() - Vector2Int.FloorToInt(offset.localPosition);
+        var pos = path.Peek().GetVectorInt() - Vector2Int.FloorToInt(Offset.localPosition);
         movement = (pos - (Vector2)transform.position).normalized;
         transform.position += (Vector3)movement * speed * Time.deltaTime;
 
@@ -56,7 +52,7 @@ public sealed class MeleeEntity : Entity
             path.Pop();
     }
 
-    protected override void Attack()
+    public override void Attack()
     {
         StartCoroutine(player.Damage(10, direction));
     }

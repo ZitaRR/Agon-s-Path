@@ -2,10 +2,11 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(BoxCollider2D))]
+[RequireComponent(typeof(EdgeCollider2D))]
 public abstract class Entity : MonoBehaviour, IDamagable
 {
+    public Transform Offset { get; private set; }
     public int Health
     {
         get => health;
@@ -43,8 +44,9 @@ public abstract class Entity : MonoBehaviour, IDamagable
     protected virtual void Awake()
     {
         rigidbody = GetComponent<Rigidbody2D>();
-        renderer = GetComponent<SpriteRenderer>();
-        animator = GetComponent<Animator>();
+        renderer = GetComponentInChildren<SpriteRenderer>();
+        animator = GetComponentInChildren<Animator>();
+        Offset = gameObject.transform.Find("Offset");
 
         ID = entities++;
     }
@@ -81,6 +83,7 @@ public abstract class Entity : MonoBehaviour, IDamagable
         renderer.material.color = new Color(color.r, color.g, color.b, alpha);
     }
 
+    //Set direction here
     protected virtual void Rotation()
     {
         if (movement.x > 0)
@@ -99,7 +102,7 @@ public abstract class Entity : MonoBehaviour, IDamagable
 
     protected abstract void Movement();
 
-    protected abstract void Attack();
+    public abstract void Attack();
 
     public IEnumerator Damage(int damage, Vector2 direction)
     {
@@ -128,7 +131,7 @@ public abstract class Entity : MonoBehaviour, IDamagable
         Destroy(gameObject);
     }
 
-    private void OnDrawGizmos()
+    protected virtual void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, viewDistance);

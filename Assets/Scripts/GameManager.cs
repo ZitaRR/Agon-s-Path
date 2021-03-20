@@ -18,7 +18,7 @@ public sealed class GameManager : MonoBehaviour
 
     public static GameManager Instance { get; private set; }
     public static Environment Environment { get; private set; }
-    public static PlayerEntity Player => Instance.player.GetComponent<PlayerEntity>();
+    public static PlayerEntity Player { get => Instance.player.GetComponentInChildren<PlayerEntity>();  }
     public static GameState State { get; private set; }
 
     [SerializeField]
@@ -52,6 +52,21 @@ public sealed class GameManager : MonoBehaviour
         Environment = gameObject.AddComponent<Environment>();
         SetState(GameState.Idle);
         player = Instantiate(player, new Vector2(0, -3), Quaternion.identity);
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (ASTAR.Nodes is null)
+            return;
+
+        foreach (Node node in ASTAR.Nodes)
+        {
+            if (node.Walkable)
+                Gizmos.color = Color.cyan;
+            else Gizmos.color = Color.red;
+
+            Gizmos.DrawCube(new Vector3(node.X, node.Y, 0), new Vector3(.2f, .2f, 0));
+        }
     }
 }
 

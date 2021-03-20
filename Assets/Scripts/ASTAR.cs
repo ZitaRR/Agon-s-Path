@@ -6,36 +6,36 @@ using UnityEngine.Tilemaps;
 
 public static class ASTAR
 {
-    private static Node[,] nodes;
-    private static BoundsInt bounds;
+    public static Node[,] Nodes { get; private set; }
+    public static BoundsInt Bounds { get; private set; }
 
     public static void SetTilemap(Tilemap map)
     {
-        bounds = map.cellBounds;
-        TileBase[] tiles = map.GetTilesBlock(bounds);
-        nodes = new Node[bounds.size.x, bounds.size.y];
+        Bounds = map.cellBounds;
+        TileBase[] tiles = map.GetTilesBlock(Bounds);
+        Nodes = new Node[Bounds.size.x, Bounds.size.y];
 
-        for (int x = bounds.xMin; x < bounds.xMax; x++)
+        for (int x = Bounds.xMin; x < Bounds.xMax; x++)
         {
-            for (int y = bounds.yMin; y < bounds.yMax; y++)
+            for (int y = Bounds.yMin; y < Bounds.yMax; y++)
             {
-                int xIndex = Mathf.Abs(x - bounds.xMin);
-                int yIndex = Mathf.Abs(y - bounds.yMin);
-                TileBase tile = tiles[xIndex + yIndex * bounds.size.x];
-                nodes[xIndex, yIndex] = new Node(x + .5f, y + .5f, tile != null);
+                int xIndex = Mathf.Abs(x - Bounds.xMin);
+                int yIndex = Mathf.Abs(y - Bounds.yMin);
+                TileBase tile = tiles[xIndex + yIndex * Bounds.size.x];
+                Nodes[xIndex, yIndex] = new Node(x + .5f, y + .5f, tile != null);
             }
         }
     }
 
     public static Stack<Node> FindPath(Vector2Int start, Vector2Int target)
     {
-        int x = Mathf.Abs(bounds.xMin) + start.x;
-        int y = Mathf.Abs(bounds.yMin) + start.y;
-        Node nStart = nodes[x, y];
+        int x = Mathf.Abs(Bounds.xMin) + start.x;
+        int y = Mathf.Abs(Bounds.yMin) + start.y;
+        Node nStart = Nodes[x, y];
 
-        x = Mathf.Abs(bounds.xMin) + target.x;
-        y = Mathf.Abs(bounds.yMin) + target.y;
-        Node nTarget = nodes[x, y];
+        x = Mathf.Abs(Bounds.xMin) + target.x;
+        y = Mathf.Abs(Bounds.yMin) + target.y;
+        Node nTarget = Nodes[x, y];
 
         var path = new Stack<Node>();
         var opened = new List<Node>();
@@ -91,17 +91,17 @@ public static class ASTAR
     public static List<Node> GetAdjacentNodes(Node node)
     {
         var list = new List<Node>();
-        int x = Mathf.Abs(bounds.xMin) + (int)Mathf.Floor(node.X);
-        int y = Mathf.Abs(bounds.yMin) + (int)Mathf.Floor(node.Y);
+        int x = Mathf.Abs(Bounds.xMin) + (int)Mathf.Floor(node.X);
+        int y = Mathf.Abs(Bounds.yMin) + (int)Mathf.Floor(node.Y);
 
-        if (x < nodes.GetLength(0) - 1)
-            list.Add(nodes[x + 1, y]);
+        if (x < Nodes.GetLength(0) - 1)
+            list.Add(Nodes[x + 1, y]);
         if (x > 1)
-            list.Add(nodes[x - 1, y]);
-        if (y < nodes.GetLength(1) - 1)
-            list.Add(nodes[x, y + 1]);
+            list.Add(Nodes[x - 1, y]);
+        if (y < Nodes.GetLength(1) - 1)
+            list.Add(Nodes[x, y + 1]);
         if (y > 1)
-            list.Add(nodes[x, y - 1]);
+            list.Add(Nodes[x, y - 1]);
         return list;
     }
 }

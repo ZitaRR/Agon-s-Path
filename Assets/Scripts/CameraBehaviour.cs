@@ -6,6 +6,8 @@ using UnityEngine;
 public sealed class CameraBehaviour : MonoBehaviour
 {
     public static Camera Camera { get; private set; }
+    public static Vector2 MouseWorldPosition
+        => Camera.ScreenToWorldPoint(Input.mousePosition);
 
     private Transform player;
     private Action behaviour;

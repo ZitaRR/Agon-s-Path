@@ -31,9 +31,6 @@ public sealed class PlayerEntity : Entity
         movement = new Vector2(x, y).normalized;
         transform.position += (Vector3)movement * speed * Time.deltaTime;
 
-        if (movement != Vector2.zero && !CombatSystem.InCombat)
-            direction = movement;
-
         if (movement != Vector2.zero)
         {
             animator.SetBool("Walking", true);
@@ -49,27 +46,34 @@ public sealed class PlayerEntity : Entity
             return;
         }
 
-        var mouse = CameraBehaviour.Camera.ScreenToWorldPoint(Input.mousePosition);
+        var mouse = CameraBehaviour.MouseWorldPosition;
         if (transform.position.x > mouse.x)
             renderer.flipX = true;
         else if (transform.position.x < mouse.x)
             renderer.flipX = false;
 
-        direction = mouse - transform.position;
+        direction = mouse - (Vector2)transform.position;
+        print(direction);
     }
 
-    protected override void Attack()
+    public override void Attack()
     {
-        var hit = Physics2D.Raycast(transform.position, direction, attackRange, targetMask);
-        if (!hit)
+        var collider = Physics2D.OverlapCircle(CameraBehaviour.MouseWorldPosition, .5f, targetMask);
+
+        if (!collider)
             return;
 
-        var t = hit.collider.transform;
-        var entity = t.GetComponent<IDamagable>();
+        var distance = Vector2.Distance(transform.position, collider.transform.position);
+        print($"Hit {collider.name} from a distance of {distance}");
+
+        if (distance > attackRange)
+            return;
+
+        var entity = collider.GetComponent<IDamagable>();
 
         if (entity is null || entity is PlayerEntity)
             return;
 
-        StartCoroutine(entity.Damage(10, direction));
+        StartCoroutine(entity.Damage(10, direction * 0));
     }
 }
