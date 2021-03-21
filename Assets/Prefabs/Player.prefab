@@ -142,7 +142,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1567341700517019494}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a73c420ae47c463498a819b168b832ec, type: 3}
+  m_Script: {fileID: 11500000, guid: a7e72cccba997bd44afdd9fa2093e7a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2314967131134483567
@@ -349,12 +349,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 8136762817627428799}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 963e923fb4d97a840a5aa7530f119857, type: 3}
+  m_Script: {fileID: 11500000, guid: aba3da9253e50a84a802f51ac2b6a087, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3.5
+  speed: 2
   health: 100
-  viewDistance: 8
+  viewDistance: 6
   attackRange: 2
   targetMask:
     serializedVersion: 2
