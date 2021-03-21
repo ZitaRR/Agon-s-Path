@@ -18,7 +18,7 @@ public sealed class GameManager : MonoBehaviour
 
     public static GameManager Instance { get; private set; }
     public static Environment Environment { get; private set; }
-    public static PlayerEntity Player { get => Instance.player.GetComponentInChildren<PlayerEntity>();  }
+    public static PlayerEntity Player { get; private set; }
     public static GameState State { get; private set; }
 
     [SerializeField]
@@ -33,6 +33,11 @@ public sealed class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void Start()
+    {
+        Player = player.GetComponent<PlayerEntity>();
     }
 
     public static void SetState(GameState state)
