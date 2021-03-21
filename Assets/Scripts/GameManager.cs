@@ -35,13 +35,9 @@ public sealed class GameManager : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    private void Start()
-    {
-        Player = player.GetComponent<PlayerEntity>();
-    }
-
     public static void SetState(GameState state)
     {
+        Debug.Log($"Game state changed from [{State}] to [{state}].");
         State = state;
         OnStateChange?.Invoke(state);
     }
@@ -57,6 +53,7 @@ public sealed class GameManager : MonoBehaviour
         Environment = gameObject.AddComponent<Environment>();
         SetState(GameState.Idle);
         player = Instantiate(player, new Vector2(0, -3), Quaternion.identity);
+        Player = player.GetComponent<PlayerEntity>();
     }
 
     private void OnDrawGizmos()
