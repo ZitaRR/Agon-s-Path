@@ -27,7 +27,7 @@ public sealed class CameraBehaviour : MonoBehaviour
     {
         player = GameManager.Player.transform;
         GameManager.OnStateChange += OnStateChanged;
-        GameManager.SetState(GameManager.GameState.Idle);
+        OnStateChanged(GameManager.State);
     }
 
     private void Update()

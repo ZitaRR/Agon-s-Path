@@ -53,7 +53,6 @@ public sealed class PlayerEntity : Entity
             renderer.flipX = false;
 
         direction = mouse - (Vector2)transform.position;
-        print(direction);
     }
 
     public override void Attack()
