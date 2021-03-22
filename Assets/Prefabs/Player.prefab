@@ -260,13 +260,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aba3da9253e50a84a802f51ac2b6a087, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed:
-    baseValue: 4
-    totalValue: 0
   health:
     baseValue: 100
     totalValue: 0
     value: 0
+  mana:
+    baseValue: 20
+    totalValue: 0
+    value: 0
+  speed:
+    baseValue: 4
+    totalValue: 0
   viewDistance:
     baseValue: 6
     totalValue: 0
