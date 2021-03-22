@@ -69,10 +69,14 @@ public abstract class Entity : MonoBehaviour, IDamagable
 
     protected virtual void Update()
     {
+        SetAlpha();
+
+        if (IsDead)
+            return;
+
         position = Vector2Int.FloorToInt(transform.position);
         Movement();
         Rotation();
-        SetAlpha();
     }
 
     //This should be moved into a base class for NPC's/AI
@@ -117,10 +121,10 @@ public abstract class Entity : MonoBehaviour, IDamagable
 
     public IEnumerator Damage(float damage, Vector2 direction)
     {
-        Health -= damage;
         if (IsDead)
             yield break;
 
+        Health -= damage;
         StartCoroutine(DamageEffect());
 
         float time = 0;
@@ -146,8 +150,10 @@ public abstract class Entity : MonoBehaviour, IDamagable
             GameManager.Instance.LoadScene("Menu");
             return;
         }
+
+        animator.SetBool("Dead", IsDead);
         CombatSystem.RemoveCombatant(this);
-        Destroy(gameObject);
+        Destroy(gameObject, 100f);
     }
 
     protected virtual void OnDrawGizmos()

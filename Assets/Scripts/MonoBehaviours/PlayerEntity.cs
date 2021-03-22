@@ -73,6 +73,6 @@ public sealed class PlayerEntity : Entity
         if (entity is null || entity is PlayerEntity)
             return;
 
-        StartCoroutine(entity.Damage(10, direction * 0));
+        StartCoroutine(entity.Damage(10, direction));
     }
 }

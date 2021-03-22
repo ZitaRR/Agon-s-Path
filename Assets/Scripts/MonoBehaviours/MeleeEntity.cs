@@ -24,6 +24,9 @@ public sealed class MeleeEntity : Entity
     {
         base.Update();
 
+        if (IsDead)
+            return;
+
         float distance = Vector2.Distance(transform.position, playerOffset.position);
         if (distance > attackRange.TotalValue)
             return;
