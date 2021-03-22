@@ -25,7 +25,7 @@ public sealed class MeleeEntity : Entity
         base.Update();
 
         float distance = Vector2.Distance(transform.position, playerOffset.position);
-        if (distance > attackRange)
+        if (distance > attackRange.TotalValue)
             return;
         
         PlayAttack();
@@ -33,7 +33,7 @@ public sealed class MeleeEntity : Entity
 
     protected override void Movement()
     {
-        if (Vector2.Distance(transform.position, playerOffset.position) <= viewDistance && path.Count <= 0)
+        if (Vector2.Distance(transform.position, playerOffset.position) <= viewDistance.TotalValue && path.Count <= 0)
         {
             path = ASTAR.FindPath(Vector2Int.FloorToInt(Offset.position), Vector2Int.FloorToInt(playerOffset.position));
             CombatSystem.AddCombatant(this);
@@ -46,7 +46,7 @@ public sealed class MeleeEntity : Entity
 
         var pos = path.Peek().GetVectorInt() - Vector2Int.FloorToInt(Offset.localPosition);
         movement = (pos - (Vector2)transform.position).normalized;
-        transform.position += (Vector3)movement * speed * Time.deltaTime;
+        transform.position += (Vector3)movement * speed.TotalValue * Time.deltaTime;
 
         if (Vector2.Distance(transform.position, pos) < .1f)
             path.Pop();

@@ -14,7 +14,7 @@ public sealed class PlayerEntity : Entity
     protected override void Update()
     {
         base.Update();
-        light.spotAngle = viewDistance;
+        light.spotAngle = viewDistance.TotalValue;
         if (Input.GetKeyUp(KeyCode.Mouse0))
             PlayAttack();
     }
@@ -29,7 +29,7 @@ public sealed class PlayerEntity : Entity
         else x = 0;
 
         movement = new Vector2(x, y).normalized;
-        transform.position += (Vector3)movement * speed * Time.deltaTime;
+        transform.position += (Vector3)movement * speed.TotalValue * Time.deltaTime;
 
         if (movement != Vector2.zero)
         {
@@ -40,7 +40,7 @@ public sealed class PlayerEntity : Entity
 
     protected override void Rotation()
     {
-        if (!CombatSystem.InCombat)
+        if (!GameManager.InCombat)
         {
             base.Rotation();
             return;
@@ -65,7 +65,7 @@ public sealed class PlayerEntity : Entity
         var distance = Vector2.Distance(transform.position, collider.transform.position);
         print($"Hit {collider.name} from a distance of {distance}");
 
-        if (distance > attackRange)
+        if (distance > attackRange.TotalValue)
             return;
 
         var entity = collider.GetComponent<IDamagable>();

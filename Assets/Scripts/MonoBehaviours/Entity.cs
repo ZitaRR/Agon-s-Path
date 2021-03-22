@@ -7,17 +7,12 @@ using UnityEngine;
 public abstract class Entity : MonoBehaviour, IDamagable
 {
     public Transform Offset { get; private set; }
-    public int Health
+    public float Health
     {
-        get => health;
-        set
-        {
-            health = value;
-            if (health <= 0)
-                Kill();
-        }
+        get => health.Value;
+        set => health.Value = value;
     }
-    public float ViewDistance { get => viewDistance; }
+    public float ViewDistance { get => viewDistance.TotalValue; }
     public int ID { get; private set; }
 
     protected new Rigidbody2D rigidbody;
@@ -30,14 +25,17 @@ public abstract class Entity : MonoBehaviour, IDamagable
     protected Color color;
     private static int entities = 0;
 
+    [Header("Stats")]
     [SerializeField]
-    protected float speed;
+    protected AttributeStat speed;
     [SerializeField]
-    protected int health;
+    protected ResourceStat health;
     [SerializeField]
-    protected float viewDistance;
+    protected AttributeStat viewDistance;
     [SerializeField]
-    protected float attackRange;
+    protected AttributeStat attackRange;
+
+    [Header("Misc")]
     [SerializeField]
     protected LayerMask targetMask;
 
@@ -55,6 +53,17 @@ public abstract class Entity : MonoBehaviour, IDamagable
     {
         player = GameManager.Player;
         color = renderer.material.color;
+
+        speed = new AttributeStat(nameof(speed), speed.BaseValue);
+        health = new ResourceStat(nameof(health), health.BaseValue);
+        viewDistance = new AttributeStat(nameof(viewDistance), viewDistance.BaseValue);
+        attackRange = new AttributeStat(nameof(attackRange), attackRange.BaseValue);
+
+        health.OnDepletion += (ResourceStat stat) =>
+        {
+            Debug.Log($"{name}'s {stat.Name} is depleted!");
+            Kill();
+        };
     }
 
     protected virtual void Update()
@@ -79,7 +88,7 @@ public abstract class Entity : MonoBehaviour, IDamagable
             return;
 
         var distance = Vector2.Distance(transform.position, player.transform.position);
-        alpha = Mathf.Clamp(player.viewDistance - distance, 0, 1);
+        alpha = Mathf.Clamp(player.viewDistance.TotalValue - distance, 0, 1);
         renderer.material.color = new Color(color.r, color.g, color.b, alpha);
     }
 
@@ -104,7 +113,7 @@ public abstract class Entity : MonoBehaviour, IDamagable
 
     public abstract void Attack();
 
-    public IEnumerator Damage(int damage, Vector2 direction)
+    public IEnumerator Damage(float damage, Vector2 direction)
     {
         Health -= damage;
         StartCoroutine(DamageEffect());
@@ -127,6 +136,11 @@ public abstract class Entity : MonoBehaviour, IDamagable
 
     public void Kill()
     {
+        if(this is PlayerEntity)
+        {
+            GameManager.Instance.LoadScene("Menu");
+            return;
+        }
         CombatSystem.RemoveCombatant(this);
         Destroy(gameObject);
     }
@@ -134,8 +148,8 @@ public abstract class Entity : MonoBehaviour, IDamagable
     protected virtual void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, viewDistance);
+        Gizmos.DrawWireSphere(transform.position, viewDistance.TotalValue);
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
+        Gizmos.DrawWireSphere(transform.position, attackRange.TotalValue);
     }
 }
