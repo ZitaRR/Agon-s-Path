@@ -17,6 +17,7 @@ public sealed class ResourceStat : AttributeStat
                 OnDepletion?.Invoke(this);
         }
     }
+    public bool IsEmpty { get => Value == 0; }
 
     [SerializeField]
     private float value;

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public sealed class SceneLoader : MonoBehaviour
 {
     public static string SceneName { get; private set; }
+    public static Vector2 StartPosition { get; private set; }
 
     private AsyncOperation loading;
     private CanvasGroup group;
@@ -75,9 +76,12 @@ public sealed class SceneLoader : MonoBehaviour
         group.alpha = alpha;
     }
 
-    public static void LoadScene(string name)
+    public static void LoadScene(string name, Vector2 pos)
     {
         SceneName = name;
+        if (pos != default)
+            StartPosition = pos;
+
         SceneManager.LoadScene("LoadingScene");
     }
 }

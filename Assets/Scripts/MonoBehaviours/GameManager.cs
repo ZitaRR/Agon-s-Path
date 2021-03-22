@@ -52,8 +52,11 @@ public sealed class GameManager : MonoBehaviour
         OnStateChange?.Invoke(state);
     }
 
+    public void LoadScene(string name, Vector2 pos)
+        => SceneLoader.LoadScene(name, pos);
+
     public void LoadScene(string name)
-        => SceneLoader.LoadScene(name);
+        => SceneLoader.LoadScene(name, default);
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -65,7 +68,7 @@ public sealed class GameManager : MonoBehaviour
         }
         
         SetState(GameState.Idle);
-        Player = Instantiate(player, new Vector2(0, -3), Quaternion.identity)
+        Player = Instantiate(player, SceneLoader.StartPosition, Quaternion.identity)
             .GetComponent<PlayerEntity>();
         Environment.gameObject.SetActive(true);
     }

@@ -14,6 +14,7 @@ public abstract class Entity : MonoBehaviour, IDamagable
     }
     public float ViewDistance { get => viewDistance.TotalValue; }
     public int ID { get; private set; }
+    public bool IsDead { get => health.IsEmpty; }
 
     protected new Rigidbody2D rigidbody;
     protected new SpriteRenderer renderer;
@@ -116,6 +117,9 @@ public abstract class Entity : MonoBehaviour, IDamagable
     public IEnumerator Damage(float damage, Vector2 direction)
     {
         Health -= damage;
+        if (IsDead)
+            yield break;
+
         StartCoroutine(DamageEffect());
 
         float time = 0;
