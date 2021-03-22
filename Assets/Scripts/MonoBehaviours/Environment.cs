@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 using static UnityEngine.ParticleSystem;
 
 public sealed class Environment : MonoBehaviour
@@ -9,8 +10,8 @@ public sealed class Environment : MonoBehaviour
     public float LightIntensity { get; private set; } = 1;
     public bool IsDay => Time >= dayStart && Time < nightStart;
 
-    private Light sun;
-    private Light player;
+    private Light2D sun;
+    private Light2D player;
     private ParticleSystem weather;
     private MainModule main;
     private float duration;
@@ -37,7 +38,8 @@ public sealed class Environment : MonoBehaviour
 
     private void Awake()
     {
-        sun = GetComponentInChildren<Light>();
+        
+        sun = GetComponentInChildren<Light2D>();
         weather = GetComponentInChildren<ParticleSystem>();
         main = weather.main;
     }
@@ -52,7 +54,7 @@ public sealed class Environment : MonoBehaviour
         if (GameManager.IsPaused)
             return;
 
-        player = GameManager.Player.GetComponentInChildren<Light>();
+        player = GameManager.Player.GetComponentInChildren<Light2D>();
     }
 
     private void FixedUpdate()
@@ -75,8 +77,8 @@ public sealed class Environment : MonoBehaviour
             Time < dayStart ? Time - nightStart : -Time + (nightStart + 1);
         LightIntensity = Mathf.Clamp(light, 0, 1);
 
-        sun.intensity = LightIntensity;
-        player.intensity = -LightIntensity + .5f;
+        sun.intensity = Mathf.Clamp(LightIntensity, .2f, 1);
+        player.intensity = 1 - LightIntensity;
     }
 
     private void UpdateWeather(float tick)

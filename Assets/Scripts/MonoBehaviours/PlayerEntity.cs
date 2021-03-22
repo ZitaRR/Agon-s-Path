@@ -1,20 +1,20 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Experimental.Rendering.Universal;
 
 public sealed class PlayerEntity : Entity
 {
-    private new Light light;
+    private new Light2D light;
 
     protected override void Awake()
     {
         base.Awake();
-        light = GetComponentInChildren<Light>();
+        light = GetComponentInChildren<Light2D>();
     }
 
     protected override void Update()
     {
         base.Update();
-        light.spotAngle = viewDistance.TotalValue;
+        light.pointLightOuterRadius = viewDistance.TotalValue;
         if (Input.GetKeyUp(KeyCode.Mouse0))
             PlayAttack();
     }

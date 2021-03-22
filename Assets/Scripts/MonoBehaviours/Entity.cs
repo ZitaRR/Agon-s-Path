@@ -78,19 +78,20 @@ public abstract class Entity : MonoBehaviour, IDamagable
     //This should be moved into a base class for NPC's/AI
     private void SetAlpha()
     {
-        var alpha = GameManager.Environment.LightIntensity;
-        if (GameManager.Environment.IsDay)
-        {
-            renderer.material.color = new Color(color.r, color.g, color.b, alpha);
-            return;
-        }
-
         if (this is PlayerEntity)
             return;
 
-        var distance = Vector2.Distance(transform.position, player.transform.position);
-        alpha = Mathf.Clamp(player.viewDistance.TotalValue - distance, 0, 1);
-        renderer.material.color = new Color(color.r, color.g, color.b, alpha);
+        float alpha = GameManager.Environment.LightIntensity;
+        float distance = Vector2.Distance(transform.position, player.transform.position);
+
+        if (distance <= player.viewDistance.TotalValue)
+        {
+            alpha = Mathf.Clamp(player.viewDistance.TotalValue - distance, alpha, 1);
+            renderer.color = new Color(color.r, color.g, color.b, alpha);
+            return;
+        }
+
+        renderer.color = new Color(color.r, color.g, color.b, alpha);
     }
 
     //Set direction here
