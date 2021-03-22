@@ -6,11 +6,19 @@ using UnityEngine;
 [RequireComponent(typeof(EdgeCollider2D))]
 public abstract class Entity : MonoBehaviour, IDamagable
 {
+    public delegate void DestroyDelegate();
+    public event DestroyDelegate OnDestroyed;
+
     public Transform Offset { get; private set; }
     public float Health
     {
         get => health.Value;
         set => health.Value = value;
+    }
+    public float Mana
+    {
+        get => mana.Value;
+        set => mana.Value = value;
     }
     public float ViewDistance { get => viewDistance.TotalValue; }
     public int ID { get; private set; }
@@ -28,9 +36,11 @@ public abstract class Entity : MonoBehaviour, IDamagable
 
     [Header("Stats")]
     [SerializeField]
-    protected AttributeStat speed;
-    [SerializeField]
     protected ResourceStat health;
+    [SerializeField]
+    protected ResourceStat mana;
+    [SerializeField]
+    protected AttributeStat speed;
     [SerializeField]
     protected AttributeStat viewDistance;
     [SerializeField]
@@ -55,15 +65,21 @@ public abstract class Entity : MonoBehaviour, IDamagable
         player = GameManager.Player;
         color = renderer.material.color;
 
-        speed = new AttributeStat(nameof(speed), speed.BaseValue);
-        health = new ResourceStat(nameof(health), health.BaseValue);
-        viewDistance = new AttributeStat(nameof(viewDistance), viewDistance.BaseValue);
-        attackRange = new AttributeStat(nameof(attackRange), attackRange.BaseValue);
+        health = new ResourceStat("Health", health.BaseValue, this);
+        mana = new ResourceStat("Mana", mana.BaseValue, this);
+        speed = new AttributeStat("Speed", speed.BaseValue, this);
+        viewDistance = new AttributeStat("View Distance", viewDistance.BaseValue, this);
+        attackRange = new AttributeStat("Attack Range", attackRange.BaseValue, this);
 
         health.OnDepletion += (ResourceStat stat) =>
         {
             Debug.Log($"{name}'s {stat.Name} is depleted!");
             Kill();
+        };
+
+        mana.OnDepletion += (ResourceStat stat) =>
+        {
+            Debug.Log($"{name}'s {stat.Name} is depleted!");
         };
     }
 
@@ -154,6 +170,11 @@ public abstract class Entity : MonoBehaviour, IDamagable
         animator.SetBool("Dead", IsDead);
         CombatSystem.RemoveCombatant(this);
         Destroy(gameObject, 100f);
+    }
+
+    private void OnDestroy()
+    {
+        OnDestroyed?.Invoke();
     }
 
     protected virtual void OnDrawGizmos()

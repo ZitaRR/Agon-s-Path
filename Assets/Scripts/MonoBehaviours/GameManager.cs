@@ -10,15 +10,19 @@ public sealed class GameManager : MonoBehaviour
         Menu,
         Idle,
         Combat,
-        Paused
+        Paused,
+        Loading
     }
 
+    public delegate void FrameDelegate();
     public delegate void StateDelegate(GameState state);
+    public static event FrameDelegate OnFrame;
     public static event StateDelegate OnStateChange;
 
     public static GameManager Instance { get; private set; }
     public static Environment Environment { get; private set; }
     public static PlayerEntity Player { get; private set; }
+    public static UserInterface UI { get; private set; }
     public static GameState State { get; private set; }
     public static bool IsPlaying { get => State is GameState.Idle || State is GameState.Combat; }
     public static bool IsPaused { get => State is GameState.Paused || State is GameState.Menu; }
@@ -39,7 +43,14 @@ public sealed class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         Environment = gameObject.GetComponentInChildren<Environment>();
+        UI = gameObject.GetComponentInChildren<UserInterface>();
+
         SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void Update()
+    {
+        OnFrame?.Invoke();
     }
 
     public static void SetState(GameState state)
@@ -60,10 +71,16 @@ public sealed class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (!scene.name.Contains("PL"))
+        Environment.gameObject.SetActive(false);
+
+        if (scene.name == "Menu")
         {
             SetState(GameState.Menu);
-            Environment.gameObject.SetActive(false);
+            return;
+        }
+        else if (scene.name == "LoadingScene")
+        {
+            SetState(GameState.Loading);
             return;
         }
         

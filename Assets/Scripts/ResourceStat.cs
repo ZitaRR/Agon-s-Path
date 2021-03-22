@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 [Serializable]
 public sealed class ResourceStat : AttributeStat
@@ -13,18 +14,46 @@ public sealed class ResourceStat : AttributeStat
         set
         {
             this.value = Mathf.Clamp(value, 0, TotalValue);
+
+            if (Entity is PlayerEntity)
+            {
+                slider.maxValue = TotalValue;
+                slider.value = this.value;
+            }
+
             if (this.value == 0)
                 OnDepletion?.Invoke(this);
         }
     }
     public bool IsEmpty { get => Value == 0; }
 
+    private readonly Slider slider;
+
     [SerializeField]
     private float value;
 
-    public ResourceStat(string name, float baseValue) 
-        : base(name, baseValue) 
+    public ResourceStat(string name, float baseValue, Entity entity) 
+        : base(name, baseValue, entity) 
     {
-        value = baseValue;
+        if (Entity is PlayerEntity)
+            slider = GameManager.UI.GetElement<Slider>($"{Name}Slider");
+
+        Value = baseValue;
+        GameManager.OnFrame += Update;
+        Entity.OnDestroyed += OnDestroyed;
+    }
+
+    private void Update()
+    {
+        if (Value >= TotalValue || Entity.IsDead)
+            return;
+
+        Value += 1f * Time.deltaTime;
+    }
+
+    private void OnDestroyed()
+    {
+        GameManager.OnFrame -= Update;
+        Entity.OnDestroyed -= OnDestroyed;
     }
 }

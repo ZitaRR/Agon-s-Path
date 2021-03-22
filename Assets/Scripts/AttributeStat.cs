@@ -9,6 +9,7 @@ public class AttributeStat
     public string Name { get; }
     public float BaseValue { get => baseValue; }
     public float TotalValue { get => totalValue; }
+    public Entity Entity { get; }
 
     private readonly List<StatModifier> modifiers;
 
@@ -17,10 +18,12 @@ public class AttributeStat
     [SerializeField]
     private float totalValue;
 
-    public AttributeStat(string name, float baseValue)
+    public AttributeStat(string name, float baseValue, Entity entity)
     {
         Name = name;
         this.baseValue = baseValue;
+        Entity = entity;
+
         modifiers = new List<StatModifier>();
         CalculateTotalValue();
     }
