@@ -20,6 +20,9 @@ public sealed class GameManager : MonoBehaviour
     public static Environment Environment { get; private set; }
     public static PlayerEntity Player { get; private set; }
     public static GameState State { get; private set; }
+    public static bool IsPlaying { get => State is GameState.Idle || State is GameState.Combat; }
+    public static bool IsPaused { get => State is GameState.Paused || State is GameState.Menu; }
+    public static bool InCombat { get => State is GameState.Combat; }
 
     [SerializeField]
     private GameObject player;
@@ -27,16 +30,23 @@ public sealed class GameManager : MonoBehaviour
     private void Awake()
     {
         if (Instance != null)
+        {
             Destroy(gameObject);
+            return;
+        }
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
+        Environment = gameObject.GetComponentInChildren<Environment>();
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     public static void SetState(GameState state)
     {
+        if (State == state)
+            return;
+
         Debug.Log($"Game state changed from [{State}] to [{state}].");
         State = state;
         OnStateChange?.Invoke(state);
@@ -47,13 +57,17 @@ public sealed class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (!scene.name.Contains("PL") && scene.name != "SampleScene")
+        if (!scene.name.Contains("PL"))
+        {
+            SetState(GameState.Menu);
+            Environment.gameObject.SetActive(false);
             return;
-
-        Environment = gameObject.AddComponent<Environment>();
+        }
+        
         SetState(GameState.Idle);
-        player = Instantiate(player, new Vector2(0, -3), Quaternion.identity);
-        Player = player.GetComponent<PlayerEntity>();
+        Player = Instantiate(player, new Vector2(0, -3), Quaternion.identity)
+            .GetComponent<PlayerEntity>();
+        Environment.gameObject.SetActive(true);
     }
 
     private void OnDrawGizmos()

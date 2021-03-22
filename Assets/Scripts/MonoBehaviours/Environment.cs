@@ -45,7 +45,14 @@ public sealed class Environment : MonoBehaviour
     private void Start()
     {
         Time = start;
-        player = GameManager.Player.transform.GetComponentInChildren<Light>();
+    }
+
+    private void OnEnable()
+    {
+        if (GameManager.IsPaused)
+            return;
+
+        player = GameManager.Player.GetComponentInChildren<Light>();
     }
 
     private void FixedUpdate()

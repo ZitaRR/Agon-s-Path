@@ -36,7 +36,6 @@ public sealed class SceneLoader : MonoBehaviour
         int index = Random.Range(0, messages.Length);
         loadingMessage.text = messages[index];
         StartCoroutine(Load());
-
     }
 
     private IEnumerator Load()
