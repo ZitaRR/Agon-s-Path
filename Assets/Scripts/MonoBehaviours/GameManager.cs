@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 public sealed class GameManager : MonoBehaviour
@@ -44,6 +45,7 @@ public sealed class GameManager : MonoBehaviour
 
         Environment = gameObject.GetComponentInChildren<Environment>();
         UI = gameObject.GetComponentInChildren<UserInterface>();
+        PostProcessing.Initialize(GetComponent<Volume>());
 
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
