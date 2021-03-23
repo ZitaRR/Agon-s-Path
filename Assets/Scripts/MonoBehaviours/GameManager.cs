@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 public sealed class GameManager : MonoBehaviour
@@ -39,6 +40,8 @@ public sealed class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         Environment = gameObject.GetComponentInChildren<Environment>();
+        PostProcessing.Initialize(GetComponent<Volume>());
+
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
