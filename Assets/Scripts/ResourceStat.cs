@@ -17,8 +17,7 @@ public sealed class ResourceStat : AttributeStat
 
             if (Entity is PlayerEntity)
             {
-                slider.maxValue = TotalValue;
-                slider.value = this.value;
+                bar.fillAmount = this.value / TotalValue;
             }
 
             if (this.value == 0)
@@ -27,7 +26,7 @@ public sealed class ResourceStat : AttributeStat
     }
     public bool IsEmpty { get => Value == 0; }
 
-    private readonly Slider slider;
+    private readonly Image bar;
 
     [SerializeField]
     private float value;
@@ -36,7 +35,7 @@ public sealed class ResourceStat : AttributeStat
         : base(name, baseValue, entity) 
     {
         if (Entity is PlayerEntity)
-            slider = GameManager.UI.GetElement<Slider>($"{Name}Slider");
+            bar = GameManager.UI.GetElement<Image>($"{Name}Bar");
 
         Value = baseValue;
         GameManager.OnFrame += Update;
