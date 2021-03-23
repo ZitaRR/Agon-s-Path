@@ -20,7 +20,7 @@ public static class PostProcessing
         profile.TryGet(out chromatic);
     }
 
-    public static void SetColourEffect(float saturation, float time = 0)
+    public static void SetSaturation(float saturation, float time = 0)
     {
         GameManager.Instance.StartCoroutine(AnimateEffect((float value) =>
         {
