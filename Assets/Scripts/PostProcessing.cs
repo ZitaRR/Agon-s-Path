@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-public static class PostProcessing 
+public static class PostProcessing
 {
     private static Volume volume;
     private static VolumeProfile profile;
@@ -18,6 +18,14 @@ public static class PostProcessing
 
         profile.TryGet(out colours);
         profile.TryGet(out chromatic);
+    }
+
+    public static void SetColourFilter(Color colour, float time = 0)
+    {
+        GameManager.Instance.StartCoroutine(AnimateEffect((Color value) =>
+        {
+            colours.colorFilter.value = value;
+        }, colours.colorFilter.value, colour, time));
     }
 
     public static void SetSaturation(float saturation, float time = 0)
@@ -36,13 +44,24 @@ public static class PostProcessing
         }, chromatic.intensity.value, intensity, time));
     }
 
-    private static IEnumerator AnimateEffect(Action<float> action, float start, float end, float duration)
+    public static IEnumerator AnimateEffect(Action<float> action, float start, float end, float duration)
     {
         float time = 0f;
         while (time <= duration)
         {
             time += Time.unscaledDeltaTime;
             action(Mathf.Lerp(start, end, time / duration));
+            yield return null;
+        }
+    }
+
+    public static IEnumerator AnimateEffect(Action<Color> action, Color start, Color end, float duration)
+    {
+        float time = 0f;
+        while (time <= duration)
+        {
+            time += Time.unscaledDeltaTime;
+            action(Color.Lerp(start, end, time / duration));
             yield return null;
         }
     }
