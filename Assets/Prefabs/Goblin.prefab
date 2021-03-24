@@ -71,7 +71,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 9
+  m_SortingOrder: 8
   m_Sprite: {fileID: -27495883366763839, guid: d643fd7d44b04e4459e2f2ebcd4244f6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -227,19 +227,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25389d9a7fd35e347a912660c8bc9a2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed:
-    baseValue: 1.8
-    totalValue: 0
   health:
     baseValue: 20
     totalValue: 0
     value: 0
+  mana:
+    baseValue: 0
+    totalValue: 0
+    value: 0
+  speed:
+    baseValue: 1.8
+    totalValue: 0
   viewDistance:
     baseValue: 4
     totalValue: 0
   attackRange:
     baseValue: 1.6
     totalValue: 0
+  spell: {fileID: 0}
   targetMask:
     serializedVersion: 2
     m_Bits: 256

@@ -57,7 +57,7 @@ public sealed class ResourceStat : AttributeStat
 
     public bool Decrease(float value)
     {
-        if (value > Value)
+        if (value > Value && Name != "Health")
             return false;
 
         Value -= value;

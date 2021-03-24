@@ -11,7 +11,8 @@ public sealed class PlayerEntity : Entity
         light = GetComponentInChildren<Light2D>();
 
         SpellSystem.Initialize(this);
-        spell.Initialize(this);
+        fire.Initialize(this);
+        ice.Initialize(this);
     }
 
     protected override void Update()

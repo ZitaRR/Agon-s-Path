@@ -40,7 +40,9 @@ public abstract class Entity : MonoBehaviour, IDamagable
 
     [Header("Spells")]
     [SerializeField]
-    protected Spell spell;
+    protected Spell fire;
+    [SerializeField]
+    protected Spell ice;
 
     [Header("Misc")]
     [SerializeField]
