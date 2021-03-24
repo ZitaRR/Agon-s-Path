@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 
 public class Projectile : MonoBehaviour
 {
@@ -16,9 +17,13 @@ public class Projectile : MonoBehaviour
         Destroy(gameObject, lifeTime);
     }
 
-    public void Initialize(Vector2 target, float damage)
+    public void Initialize(Vector2 target, float damage, Color colour)
     {
         this.damage = damage;
+
+        var light = GetComponentInChildren<Light2D>();
+        if (light)
+            light.color = colour;
 
         target.x -= transform.position.x;
         target.y -= transform.position.y;
