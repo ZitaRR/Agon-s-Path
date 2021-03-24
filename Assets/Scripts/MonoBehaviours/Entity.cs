@@ -10,16 +10,8 @@ public abstract class Entity : MonoBehaviour, IDamagable
     public event DestroyDelegate OnDestroyed;
 
     public Transform Offset { get; private set; }
-    public float Health
-    {
-        get => health.Value;
-        set => health.Value = value;
-    }
-    public float Mana
-    {
-        get => mana.Value;
-        set => mana.Value = value;
-    }
+    public ResourceStat Health { get => health; }
+    public ResourceStat Mana { get => mana; }
     public float ViewDistance { get => viewDistance.TotalValue; }
     public int ID { get; private set; }
     public bool IsDead { get => health.IsEmpty; }
@@ -70,17 +62,6 @@ public abstract class Entity : MonoBehaviour, IDamagable
         speed = new AttributeStat("Speed", speed.BaseValue, this);
         viewDistance = new AttributeStat("View Distance", viewDistance.BaseValue, this);
         attackRange = new AttributeStat("Attack Range", attackRange.BaseValue, this);
-
-        health.OnDepletion += (ResourceStat stat) =>
-        {
-            Debug.Log($"{name}'s {stat.Name} is depleted!");
-            Kill();
-        };
-
-        mana.OnDepletion += (ResourceStat stat) =>
-        {
-            Debug.Log($"{name}'s {stat.Name} is depleted!");
-        };
     }
 
     protected virtual void Update()
@@ -140,7 +121,7 @@ public abstract class Entity : MonoBehaviour, IDamagable
         if (IsDead)
             yield break;
 
-        Health -= damage;
+        Health.Decrease(damage);
         StartCoroutine(DamageEffect());
 
         float time = 0;
@@ -159,17 +140,22 @@ public abstract class Entity : MonoBehaviour, IDamagable
         color = new Color(1, 1, 1);
     }
 
-    public void Kill()
+    public virtual void Kill()
     {
-        if(this is PlayerEntity)
-        {
-            GameManager.Instance.LoadScene("Menu");
-            return;
-        }
-
         animator.SetBool("Dead", IsDead);
         CombatSystem.RemoveCombatant(this);
         Destroy(gameObject, 100f);
+    }
+
+    protected virtual void OnHealthDepletion(ResourceStat stat)
+    {
+        Debug.Log($"{name}'s {stat.Name} is depleted!");
+        Kill();
+    }
+
+    protected virtual void OnManaDepletion(ResourceStat stat)
+    {
+        Debug.Log($"{name}'s {stat.Name} is depleted!");
     }
 
     private void OnDestroy()

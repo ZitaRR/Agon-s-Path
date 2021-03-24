@@ -75,4 +75,9 @@ public sealed class PlayerEntity : Entity
 
         StartCoroutine(entity.Damage(10, direction));
     }
+
+    public override void Kill()
+    {
+        GameManager.Instance.LoadScene("Menu");
+    }
 }

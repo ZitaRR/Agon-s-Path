@@ -11,7 +11,7 @@ public sealed class ResourceStat : AttributeStat
     public float Value
     {
         get => value;
-        set
+        private set
         {
             this.value = Mathf.Clamp(value, 0, TotalValue);
 
@@ -48,6 +48,16 @@ public sealed class ResourceStat : AttributeStat
             return;
 
         Value += 1f * Time.deltaTime;
+    }
+
+    public void Increase(float value)
+    {
+        Value += value;
+    }
+
+    public void Decrease(float value)
+    {
+        Value -= value;
     }
 
     private void OnDestroyed()
