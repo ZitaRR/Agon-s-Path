@@ -10,8 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3d608ed76ca66be488d50f37c966c8ec, type: 3}
-  m_Name: Ice Spear
+  m_Name: IceSpear
   m_EditorClassIdentifier: 
-  spell: {fileID: 0}
-  cost: 0
-  key: 0
+  spell: {fileID: 6072180536817187947, guid: e70a3d4a80a1d16429354ef244330850, type: 3}
+  name: Ice Spear
+  damage: 5
+  cost: 4
+  key: 50
