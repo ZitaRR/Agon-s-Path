@@ -55,9 +55,13 @@ public sealed class ResourceStat : AttributeStat
         Value += value;
     }
 
-    public void Decrease(float value)
+    public bool Decrease(float value)
     {
+        if (value > Value)
+            return false;
+
         Value -= value;
+        return true;
     }
 
     private void OnDestroyed()

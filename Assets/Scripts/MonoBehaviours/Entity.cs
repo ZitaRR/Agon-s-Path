@@ -38,6 +38,10 @@ public abstract class Entity : MonoBehaviour, IDamagable
     [SerializeField]
     protected AttributeStat attackRange;
 
+    [Header("Spells")]
+    [SerializeField]
+    protected Spell spell;
+
     [Header("Misc")]
     [SerializeField]
     protected LayerMask targetMask;
@@ -62,6 +66,9 @@ public abstract class Entity : MonoBehaviour, IDamagable
         speed = new AttributeStat("Speed", speed.BaseValue, this);
         viewDistance = new AttributeStat("View Distance", viewDistance.BaseValue, this);
         attackRange = new AttributeStat("Attack Range", attackRange.BaseValue, this);
+
+        Health.OnDepletion += OnHealthDepletion;
+        Mana.OnDepletion += OnManaDepletion;
     }
 
     protected virtual void Update()

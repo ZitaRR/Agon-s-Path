@@ -277,6 +277,7 @@ MonoBehaviour:
   attackRange:
     baseValue: 2
     totalValue: 0
+  spell: {fileID: 11400000, guid: 7ac3f37973aa1214ea4dbab49e85c5f1, type: 2}
   targetMask:
     serializedVersion: 2
     m_Bits: 256
