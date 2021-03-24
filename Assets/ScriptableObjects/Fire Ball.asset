@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d608ed76ca66be488d50f37c966c8ec, type: 3}
   m_Name: Fire Ball
   m_EditorClassIdentifier: 
-  spell: {fileID: 0}
-  cost: 0
-  key: 0
+  spell: {fileID: 5766327709552403980, guid: be40a0ed2880d1044bc17e4cab6e6595, type: 3}
+  cost: 10
+  key: 49

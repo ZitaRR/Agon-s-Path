@@ -23,7 +23,7 @@ public static class SpellSystem
 
         SpellSystem.spell = spell;
         SpellSystem.action = action;
-        //PostProcessing.SetChromaticAberration(.7f, 2f);
+        PostProcessing.SetChromaticAberration(.7f, 2f);
     }
 
     public static void Disable()
@@ -33,7 +33,7 @@ public static class SpellSystem
 
         spell = null;
         action = null;
-        //PostProcessing.SetChromaticAberration(0f, 1f);
+        PostProcessing.SetChromaticAberration(0f, 1f);
     }
 
     private static void Update()
