@@ -92,6 +92,14 @@ public sealed class GameManager : MonoBehaviour
         Environment.gameObject.SetActive(true);
     }
 
+    public static void SetTime(float time, float duration = 0)
+    {
+        Instance.StartCoroutine(PostProcessing.AnimateEffect((float value) =>
+        {
+            Time.timeScale = value;
+        }, Time.timeScale, time, duration));
+    }
+
     private void OnDrawGizmos()
     {
         if (ASTAR.Nodes is null)

@@ -23,7 +23,8 @@ public static class SpellSystem
 
         SpellSystem.spell = spell;
         SpellSystem.action = action;
-        PostProcessing.SetChromaticAberration(.7f, 2f);
+        GameManager.SetTime(.2f, .5f);
+        PostProcessing.SetChromaticAberration(.7f, .5f);
     }
 
     public static void Disable()
@@ -33,7 +34,8 @@ public static class SpellSystem
 
         spell = null;
         action = null;
-        PostProcessing.SetChromaticAberration(0f, 1f);
+        GameManager.SetTime(1f, .2f);
+        PostProcessing.SetChromaticAberration(0f, .2f);
     }
 
     private static void Update()
@@ -41,7 +43,9 @@ public static class SpellSystem
         if (!IsActive)
             return;
 
-        entity.Mana.Decrease(1f * Time.unscaledDeltaTime);
+        if (!entity.Mana.Decrease(1f * Time.unscaledDeltaTime))
+            Disable();
+
         if (Input.GetKeyUp(KeyCode.Mouse0))
         {
             action();

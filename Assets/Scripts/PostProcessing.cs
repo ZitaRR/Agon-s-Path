@@ -36,7 +36,7 @@ public static class PostProcessing
         }, chromatic.intensity.value, intensity, time));
     }
 
-    private static IEnumerator AnimateEffect(Action<float> action, float start, float end, float duration)
+    public static IEnumerator AnimateEffect(Action<float> action, float start, float end, float duration)
     {
         float time = 0f;
         while (time <= duration)
