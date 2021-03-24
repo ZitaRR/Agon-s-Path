@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: FireBall
   m_EditorClassIdentifier: 
   spell: {fileID: 5766327709552403980, guid: be40a0ed2880d1044bc17e4cab6e6595, type: 3}
+  colour: {r: 1, g: 0.7791989, b: 0.6084906, a: 1}
   name: Fire Ball
   damage: 10
   cost: 10

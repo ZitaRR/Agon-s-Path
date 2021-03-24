@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: LightningBall
   m_EditorClassIdentifier: 
   spell: {fileID: 5409956569070182673, guid: 4607e291c02d7e644932d6a5a2bf34a0, type: 3}
+  colour: {r: 0.977137, g: 1, b: 0.7028302, a: 1}
   name: Lightning Ball
   damage: 20
   cost: 15

@@ -4,10 +4,14 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Spell", menuName = "Agon's Path/Spell")]
 public class Spell : ScriptableObject
 {
+    public Color Colour { get => colour; }
+
     private Entity entity;
 
     [SerializeField]
     private GameObject spell;
+    [SerializeField]
+    private Color colour;
     [SerializeField]
     private new string name;
     [SerializeField]
@@ -45,7 +49,7 @@ public class Spell : ScriptableObject
 
         var projectile = MonoBehaviour.Instantiate(spell, entity.transform.position, Quaternion.identity)
             .GetComponent<Projectile>();
-        projectile.Initialize(CameraBehaviour.MouseWorldPosition, damage);
+        projectile.Initialize(CameraBehaviour.MouseWorldPosition, damage, colour);
 
         Debug.Log($"{entity.name} casting {name}");
     }

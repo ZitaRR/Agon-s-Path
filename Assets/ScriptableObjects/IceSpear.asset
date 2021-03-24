@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: IceSpear
   m_EditorClassIdentifier: 
   spell: {fileID: 6072180536817187947, guid: e70a3d4a80a1d16429354ef244330850, type: 3}
+  colour: {r: 0.7783019, g: 0.96354616, b: 1, a: 1}
   name: Ice Spear
   damage: 5
   cost: 4
