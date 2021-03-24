@@ -6,12 +6,8 @@ public class Projectile : MonoBehaviour
 {
     public const float SPEED = 10;
 
-    public string Name { get => name; }
+    private float damage;
 
-    [SerializeField]
-    protected new string name;
-    [SerializeField]
-    protected float damage = 10;
     [SerializeField]
     protected float lifeTime;
 
@@ -20,8 +16,10 @@ public class Projectile : MonoBehaviour
         Destroy(gameObject, lifeTime);
     }
 
-    public void Initialize(Vector2 target)
+    public void Initialize(Vector2 target, float damage)
     {
+        this.damage = damage;
+
         target.x -= transform.position.x;
         target.y -= transform.position.y;
         float angle = Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg;

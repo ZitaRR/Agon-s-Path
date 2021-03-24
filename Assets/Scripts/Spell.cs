@@ -9,6 +9,10 @@ public class Spell : ScriptableObject
     [SerializeField]
     private GameObject spell;
     [SerializeField]
+    private new string name;
+    [SerializeField]
+    private float damage;
+    [SerializeField]
     private float cost;
     [SerializeField]
     private KeyCode key;
@@ -41,9 +45,9 @@ public class Spell : ScriptableObject
 
         var projectile = MonoBehaviour.Instantiate(spell, entity.transform.position, Quaternion.identity)
             .GetComponent<Projectile>();
-        projectile.Initialize(CameraBehaviour.MouseWorldPosition);
+        projectile.Initialize(CameraBehaviour.MouseWorldPosition, damage);
 
-        Debug.Log($"{entity.name} casting {projectile.Name}");
+        Debug.Log($"{entity.name} casting {name}");
     }
 
     private void OnDestroyed()
