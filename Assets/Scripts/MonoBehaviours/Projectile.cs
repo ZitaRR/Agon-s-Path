@@ -42,6 +42,7 @@ public class Projectile : MonoBehaviour
         if (entity is null || entity is PlayerEntity)
             return;
 
+        Debug.Log($"{name} dealt {damage} to {entity}");
         StartCoroutine(entity.Damage(damage, transform.position));
         Destroy(gameObject);
     }

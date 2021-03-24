@@ -83,7 +83,7 @@ public sealed class PlayerEntity : Entity
         if (entity is null || entity is PlayerEntity)
             return;
 
-        StartCoroutine(entity.Damage(10, direction));
+        StartCoroutine(entity.Damage(kineticMultiplier.TotalValue, direction));
     }
 
     public override void Kill()

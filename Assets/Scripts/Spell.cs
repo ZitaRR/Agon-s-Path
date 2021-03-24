@@ -49,9 +49,10 @@ public class Spell : ScriptableObject
 
         var projectile = MonoBehaviour.Instantiate(spell, entity.transform.position, Quaternion.identity)
             .GetComponent<Projectile>();
-        projectile.Initialize(CameraBehaviour.MouseWorldPosition, damage, colour);
-
-        Debug.Log($"{entity.name} casting {name}");
+        projectile.Initialize(
+            CameraBehaviour.MouseWorldPosition,
+            damage * entity.SpellMulitplier.TotalValue,
+            colour);
     }
 
     private void OnDestroyed()
