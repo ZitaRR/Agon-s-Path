@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d608ed76ca66be488d50f37c966c8ec, type: 3}
+  m_Name: LightningBall
+  m_EditorClassIdentifier: 
+  spell: {fileID: 5409956569070182673, guid: 4607e291c02d7e644932d6a5a2bf34a0, type: 3}
+  colour: {r: 0.977137, g: 1, b: 0.7028302, a: 1}
+  name: Lightning Ball
+  damage: 20
+  cost: 15
+  key: 51

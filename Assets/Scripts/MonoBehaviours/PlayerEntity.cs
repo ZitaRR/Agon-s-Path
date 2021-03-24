@@ -9,12 +9,22 @@ public sealed class PlayerEntity : Entity
     {
         base.Awake();
         light = GetComponentInChildren<Light2D>();
+
+        SpellSystem.Initialize(this);
+        foreach (var spell in spells)
+        {
+            spell.Initialize(this);
+        }
     }
 
     protected override void Update()
     {
         base.Update();
         light.pointLightOuterRadius = viewDistance.TotalValue;
+
+        if (SpellSystem.IsActive)
+            return;
+
         if (Input.GetKeyUp(KeyCode.Mouse0))
             PlayAttack();
     }
@@ -73,11 +83,17 @@ public sealed class PlayerEntity : Entity
         if (entity is null || entity is PlayerEntity)
             return;
 
-        StartCoroutine(entity.Damage(10, direction));
+        StartCoroutine(entity.Damage(kineticMultiplier.TotalValue, direction));
     }
 
     public override void Kill()
     {
         GameManager.Instance.LoadScene("Menu");
+    }
+
+    protected override void OnManaDepletion(ResourceStat stat)
+    {
+        base.OnManaDepletion(stat);
+        SpellSystem.Disable();
     }
 }

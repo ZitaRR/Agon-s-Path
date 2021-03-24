@@ -268,6 +268,12 @@ MonoBehaviour:
     baseValue: 20
     totalValue: 0
     value: 0
+  kineticMultiplier:
+    baseValue: 10
+    totalValue: 0
+  spellMultiplier:
+    baseValue: 1.1
+    totalValue: 0
   speed:
     baseValue: 4
     totalValue: 0
@@ -277,6 +283,10 @@ MonoBehaviour:
   attackRange:
     baseValue: 2
     totalValue: 0
+  spells:
+  - {fileID: 11400000, guid: 7ac3f37973aa1214ea4dbab49e85c5f1, type: 2}
+  - {fileID: 11400000, guid: adb7ea7dd0477644d875a5462ff9c264, type: 2}
+  - {fileID: 11400000, guid: e339648b7a023b9488bf8ec024f5da6d, type: 2}
   targetMask:
     serializedVersion: 2
     m_Bits: 256

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -12,6 +13,8 @@ public abstract class Entity : MonoBehaviour, IDamagable
     public Transform Offset { get; private set; }
     public ResourceStat Health { get => health; }
     public ResourceStat Mana { get => mana; }
+    public AttributeStat KineticMultipler { get => kineticMultiplier; }
+    public AttributeStat SpellMulitplier { get => spellMultiplier; }
     public float ViewDistance { get => viewDistance.TotalValue; }
     public int ID { get; private set; }
     public bool IsDead { get => health.IsEmpty; }
@@ -32,11 +35,19 @@ public abstract class Entity : MonoBehaviour, IDamagable
     [SerializeField]
     protected ResourceStat mana;
     [SerializeField]
+    protected AttributeStat kineticMultiplier;      //Currently using kinetic as our total melee damage
+    [SerializeField]                                //This should mutliply the current equipped weapon 
+    protected AttributeStat spellMultiplier;        //base damage in the future
+    [SerializeField]
     protected AttributeStat speed;
     [SerializeField]
     protected AttributeStat viewDistance;
     [SerializeField]
     protected AttributeStat attackRange;
+
+    [Header("Spells")]
+    [SerializeField]
+    protected List<Spell> spells;
 
     [Header("Misc")]
     [SerializeField]
@@ -59,9 +70,14 @@ public abstract class Entity : MonoBehaviour, IDamagable
 
         health = new ResourceStat("Health", health.BaseValue, this);
         mana = new ResourceStat("Mana", mana.BaseValue, this);
+        kineticMultiplier = new AttributeStat("Kinetic", kineticMultiplier.BaseValue, this);
+        spellMultiplier = new AttributeStat("Spell", spellMultiplier.BaseValue, this);
         speed = new AttributeStat("Speed", speed.BaseValue, this);
         viewDistance = new AttributeStat("View Distance", viewDistance.BaseValue, this);
         attackRange = new AttributeStat("Attack Range", attackRange.BaseValue, this);
+
+        Health.OnDepletion += OnHealthDepletion;
+        Mana.OnDepletion += OnManaDepletion;
     }
 
     protected virtual void Update()

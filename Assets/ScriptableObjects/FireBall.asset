@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d608ed76ca66be488d50f37c966c8ec, type: 3}
+  m_Name: FireBall
+  m_EditorClassIdentifier: 
+  spell: {fileID: 5766327709552403980, guid: be40a0ed2880d1044bc17e4cab6e6595, type: 3}
+  colour: {r: 1, g: 0.7791989, b: 0.6084906, a: 1}
+  name: Fire Ball
+  damage: 10
+  cost: 10
+  key: 49
