@@ -34,10 +34,7 @@ public class UserInterface : MonoBehaviour
             if(element.name == name)
             {
                 element.gameObject.SetActive(true);
-                for (int i = 0; i < element.transform.childCount; i++)
-                {
-                    element.transform.GetChild(i).gameObject.SetActive(true);
-                }
+                SetChildren(element.transform, true);
                 return;
             }
         }
@@ -71,6 +68,19 @@ public class UserInterface : MonoBehaviour
                 return element.GetComponentInChildren<T>();
         }
         return default;
+    }
+
+    private void SetChildren(Transform transform, bool value)
+    {
+        if (transform.childCount <= 0)
+            return;
+
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Transform child = transform.GetChild(i);
+            child.gameObject.SetActive(value);
+            SetChildren(child, value);
+        }
     }
 
     private void OnStateChanged(GameManager.GameState state)
