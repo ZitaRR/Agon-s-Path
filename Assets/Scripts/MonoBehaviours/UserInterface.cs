@@ -9,12 +9,6 @@ public class UserInterface : MonoBehaviour
     [SerializeField]
     private List<Component> elements;
 
-    private void Start()
-    {
-        GameManager.OnStateChange += OnStateChanged;
-        OnStateChanged(GameManager.State);
-    }
-
     public void Enable(string name)
     {
         foreach (var element in elements)
@@ -80,25 +74,6 @@ public class UserInterface : MonoBehaviour
             Transform child = transform.GetChild(i);
             child.gameObject.SetActive(value);
             SetChildren(child, value);
-        }
-    }
-
-    private void OnStateChanged(GameManager.GameState state)
-    {
-        switch (state)
-        {
-            case GameManager.GameState.Menu:
-                DisableAll();
-                Enable("MainMenu");
-                break;
-            case GameManager.GameState.Loading:
-                DisableAll();
-                break;
-            case GameManager.GameState.Combat:
-            case GameManager.GameState.Idle:
-                DisableAll();
-                EnableSelfAndChildren("PlayerUI");
-                break;
         }
     }
 }

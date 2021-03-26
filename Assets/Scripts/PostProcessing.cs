@@ -47,7 +47,7 @@ public static class PostProcessing
     public static IEnumerator AnimateEffect(Action<float> action, float start, float end, float duration)
     {
         float time = 0f;
-        while (time <= duration)
+        while (time <= duration && !(StateMachine.State is PauseState))
         {
             time += Time.unscaledDeltaTime;
             action(Mathf.Lerp(start, end, time / duration));
@@ -58,7 +58,7 @@ public static class PostProcessing
     public static IEnumerator AnimateEffect(Action<Color> action, Color start, Color end, float duration)
     {
         float time = 0f;
-        while (time <= duration)
+        while (time <= duration && !(StateMachine.State is PauseState))
         {
             time += Time.unscaledDeltaTime;
             action(Color.Lerp(start, end, time / duration));

@@ -51,10 +51,7 @@ public sealed class Environment : MonoBehaviour
 
     private void OnEnable()
     {
-        if (!GameManager.IsPlaying)
-            return;
-
-        player = GameManager.Player.GetComponentInChildren<Light2D>();
+        player = GameManager.Player?.GetComponentInChildren<Light2D>();
     }
 
     private void FixedUpdate()

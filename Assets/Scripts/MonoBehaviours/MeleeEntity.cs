@@ -34,8 +34,10 @@ public sealed class MeleeEntity : Entity
         PlayAttack();
     }
 
-    protected override void Movement()
+    public override void Movement()
     {
+        Rotation();
+
         if (Vector2.Distance(transform.position, playerOffset.position) <= viewDistance.TotalValue && path.Count <= 0)
         {
             path = ASTAR.FindPath(Vector2Int.FloorToInt(Offset.position), Vector2Int.FloorToInt(playerOffset.position));

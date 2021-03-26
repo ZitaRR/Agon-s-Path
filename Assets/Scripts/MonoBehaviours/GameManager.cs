@@ -6,28 +6,14 @@ using UnityEngine.SceneManagement;
 
 public sealed class GameManager : MonoBehaviour
 {
-    public enum GameState
-    {
-        Menu,
-        Idle,
-        Combat,
-        Paused,
-        Loading
-    }
-
     public delegate void FrameDelegate();
-    public delegate void StateDelegate(GameState state);
     public static event FrameDelegate OnFrame;
-    public static event StateDelegate OnStateChange;
 
     public static GameManager Instance { get; private set; }
     public static Environment Environment { get; private set; }
     public static PlayerEntity Player { get; private set; }
+    public static CameraBehaviour Camera { get; private set; }
     public static UserInterface UI { get; private set; }
-    public static GameState State { get; private set; }
-    public static bool IsPlaying { get => State is GameState.Idle || State is GameState.Combat; }
-    public static bool IsPaused { get => State is GameState.Paused || State is GameState.Menu; }
-    public static bool InCombat { get => State is GameState.Combat; }
 
     [SerializeField]
     private GameObject player;
@@ -44,6 +30,7 @@ public sealed class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         Environment = gameObject.GetComponentInChildren<Environment>();
+        Camera = player.GetComponent<CameraBehaviour>();
         UI = gameObject.GetComponentInChildren<UserInterface>();
         PostProcessing.Initialize(GetComponent<Volume>());
 
@@ -55,14 +42,9 @@ public sealed class GameManager : MonoBehaviour
         OnFrame?.Invoke();
     }
 
-    public static void SetState(GameState state)
+    public void SetPreviousState() 
     {
-        if (State == state)
-            return;
-
-        Debug.Log($"Game state changed from [{State}] to [{state}].");
-        State = state;
-        OnStateChange?.Invoke(state);
+        StateMachine.SetState(StateMachine.State.Previous);
     }
 
     public void LoadScene(string name, Vector2 pos)
@@ -77,23 +59,30 @@ public sealed class GameManager : MonoBehaviour
 
         if (scene.name == "Menu")
         {
-            SetState(GameState.Menu);
+            StateMachine.SetState(new MenuState(StateMachine.State?.Previous));
             return;
         }
         else if (scene.name == "LoadingScene")
         {
-            SetState(GameState.Loading);
+            StateMachine.SetState(new LoadingState(StateMachine.State?.Previous));
             return;
         }
-        
-        SetState(GameState.Idle);
+
         Player = Instantiate(player, SceneLoader.StartPosition, Quaternion.identity)
             .GetComponent<PlayerEntity>();
         Environment.gameObject.SetActive(true);
+
+        StateMachine.SetState(new IdleState(StateMachine.State?.Previous));
     }
 
     public static void SetTime(float time, float duration = 0)
     {
+        if (duration <= 0)
+        {
+            Time.timeScale = time;
+            return;
+        }
+
         Instance.StartCoroutine(PostProcessing.AnimateEffect((float value) =>
         {
             Time.timeScale = value;

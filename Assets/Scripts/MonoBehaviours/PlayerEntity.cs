@@ -10,7 +10,6 @@ public sealed class PlayerEntity : Entity
         base.Awake();
         light = GetComponentInChildren<Light2D>();
 
-        SpellSystem.Initialize(this);
         foreach (var spell in spells)
         {
             spell.Initialize(this);
@@ -19,18 +18,13 @@ public sealed class PlayerEntity : Entity
 
     protected override void Update()
     {
-        base.Update();
         light.pointLightOuterRadius = viewDistance.TotalValue;
-
-        if (SpellSystem.IsActive)
-            return;
-
-        if (Input.GetKeyUp(KeyCode.Mouse0))
-            PlayAttack();
     }
 
-    protected override void Movement()
+    public override void Movement()
     {
+        Rotation();
+
         float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
 
@@ -50,7 +44,7 @@ public sealed class PlayerEntity : Entity
 
     protected override void Rotation()
     {
-        if (!GameManager.InCombat)
+        if (!(StateMachine.State is CombatState))
         {
             base.Rotation();
             return;
@@ -94,6 +88,5 @@ public sealed class PlayerEntity : Entity
     protected override void OnManaDepletion(ResourceStat stat)
     {
         base.OnManaDepletion(stat);
-        SpellSystem.Disable();
     }
 }

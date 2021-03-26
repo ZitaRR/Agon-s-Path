@@ -23,25 +23,14 @@ public sealed class CameraBehaviour : MonoBehaviour
         Camera = Camera.main;
     }
 
-    private void Start()
+    public void Roaming()
     {
         player = GameManager.Player.transform;
-        GameManager.OnStateChange += OnStateChanged;
-        OnStateChanged(GameManager.State);
-    }
-
-    private void Update()
-    {
-        behaviour();
-    }
-
-    private void Roaming()
-    {
         target = new Vector3(player.position.x, player.position.y, Camera.transform.position.z);
         Camera.transform.position = Vector3.Lerp(Camera.transform.position, target, transitionSmoothening * Time.deltaTime);
     }
 
-    private void Combat()
+    public void Combat()
     {
         var entites = CombatSystem.GetPositions();
         entites.Add(player.position);
@@ -50,27 +39,12 @@ public sealed class CameraBehaviour : MonoBehaviour
         Camera.transform.position = Vector3.Lerp(Camera.transform.position, target, transitionSmoothening * Time.deltaTime);
     }
 
-    private void Mouse()
+    public void Mouse()
     {
+        player = GameManager.Player.transform;
         Vector3 midPoint = (player.position + Camera.ScreenToWorldPoint(Input.mousePosition)) / 2;
         Vector3 offset = Vector3.ClampMagnitude(midPoint - player.position, transitionDistance);
         target = new Vector3(player.position.x + offset.x, player.position.y + offset.y, Camera.transform.position.z);
         Camera.transform.position = Vector3.Lerp(Camera.transform.position, target, transitionSmoothening * Time.deltaTime);
-    }
-
-    private void OnStateChanged(GameManager.GameState state)
-    {
-        switch (state)
-        {
-            case GameManager.GameState.Combat:
-                behaviour = Combat;
-                break;
-            case GameManager.GameState.Idle:
-                behaviour = Roaming;
-                break;
-            default:
-                behaviour = Roaming;
-                break;
-        }
     }
 }

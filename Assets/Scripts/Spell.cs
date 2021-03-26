@@ -6,7 +6,8 @@ public class Spell : ScriptableObject
 {
     public Color Colour { get => colour; }
 
-    private Entity entity;
+    public Entity Entity { get; private set; }
+    public KeyCode Key { get => key; }
 
     [SerializeField]
     private GameObject spell;
@@ -23,41 +24,19 @@ public class Spell : ScriptableObject
 
     public void Initialize(Entity entity)
     {
-        this.entity = entity;
-
-        if (this.entity is PlayerEntity)
-        {
-            GameManager.OnFrame += Update;
-            this.entity.OnDestroyed += OnDestroyed;
-        }
+        Entity = entity;
     }
 
-    private void Update()
+    public void Spawn()
     {
-        if (Input.GetKeyUp(key))
-        {
-            if (SpellSystem.IsActive)
-                SpellSystem.Disable();
-            else SpellSystem.Enable(this, Spawn);
-        }
-    }
-
-    private void Spawn()
-    {
-        if (!entity.Mana.Decrease(cost))
+        if (!Entity.Mana.Decrease(cost))
             return;
 
-        var projectile = MonoBehaviour.Instantiate(spell, entity.transform.position, Quaternion.identity)
+        var projectile = MonoBehaviour.Instantiate(spell, Entity.transform.position, Quaternion.identity)
             .GetComponent<Projectile>();
         projectile.Initialize(
             CameraBehaviour.MouseWorldPosition,
-            damage * entity.SpellMulitplier.TotalValue,
+            damage * Entity.SpellMulitplier.TotalValue,
             colour);
-    }
-
-    private void OnDestroyed()
-    {
-        GameManager.OnFrame -= Update;
-        this.entity.OnDestroyed -= OnDestroyed;
     }
 }

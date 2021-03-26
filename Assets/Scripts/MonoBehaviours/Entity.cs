@@ -15,6 +15,7 @@ public abstract class Entity : MonoBehaviour, IDamagable
     public ResourceStat Mana { get => mana; }
     public AttributeStat KineticMultipler { get => kineticMultiplier; }
     public AttributeStat SpellMulitplier { get => spellMultiplier; }
+    public List<Spell> Spells { get => spells; }
     public float ViewDistance { get => viewDistance.TotalValue; }
     public int ID { get; private set; }
     public bool IsDead { get => health.IsEmpty; }
@@ -25,7 +26,6 @@ public abstract class Entity : MonoBehaviour, IDamagable
     protected PlayerEntity player;
     protected Vector2 movement;
     protected Vector2 direction;
-    protected Vector2Int position;
     protected Color color;
     private static int entities = 0;
 
@@ -87,9 +87,7 @@ public abstract class Entity : MonoBehaviour, IDamagable
         if (IsDead)
             return;
 
-        position = Vector2Int.FloorToInt(transform.position);
         Movement();
-        Rotation();
     }
 
     //This should be moved into a base class for NPC's/AI
@@ -128,7 +126,10 @@ public abstract class Entity : MonoBehaviour, IDamagable
         animator.Play("Attack");
     }
 
-    protected abstract void Movement();
+    public virtual void Movement()
+    {
+        Rotation();
+    }
 
     public abstract void Attack();
 
