@@ -29,6 +29,6 @@ public sealed class PauseState : State
     protected override void Update()
     {
         if (Input.GetKeyUp(KeyCode.Escape))
-            StateMachine.SetState(Previous);
+            StateMachine.SetState(Previous, Previous is SpellState);
     }
 }

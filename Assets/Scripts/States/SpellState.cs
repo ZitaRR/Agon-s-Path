@@ -13,8 +13,18 @@ public sealed class SpellState : State
     {
         base.Start();
 
+        GameManager.UI.EnableSelfAndChildren("PlayerUI");
         GameManager.SetTime(.2f, .5f);
         PostProcessing.SetChromaticAberration(.7f, .5f);
+    }
+
+    public override void Continue()
+    {
+        base.Continue();
+
+        GameManager.UI.EnableSelfAndChildren("PlayerUI");
+        GameManager.SetTime(.2f);
+        PostProcessing.SetChromaticAberration(.7f);
     }
 
     public override void End()

@@ -24,6 +24,11 @@ public abstract class State
         GameManager.OnFrame += Update;
     }
 
+    public virtual void Continue()
+    {
+        GameManager.OnFrame += Update;
+    }
+
     public virtual void End()
     {
         GameManager.OnFrame -= Update;

@@ -6,7 +6,7 @@ public static class StateMachine
 {
     public static State State { get; private set; }
 
-    public static void SetState(State state)
+    public static void SetState(State state, bool shouldContinue = false)
     {
         if (State == state)
             return;
@@ -14,6 +14,9 @@ public static class StateMachine
         Debug.Log($"Changed state from {State?.Name ?? "None"} to {state.Name}");
         State?.End();
         State = state;
-        State.Start();
+
+        if (shouldContinue)
+            State.Continue();
+        else State.Start();
     }
 }
