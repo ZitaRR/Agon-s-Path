@@ -4,9 +4,11 @@ using UnityEngine;
 
 public sealed class PauseState : State
 {
-    public PauseState(State previous) : base(previous)
-    {
+    private string ui;
 
+    public PauseState(State previous, string ui = "PauseMenu") : base(previous)
+    {
+        this.ui = ui;
     }
 
     public override void Start()
@@ -15,7 +17,7 @@ public sealed class PauseState : State
 
         GameManager.SetTime(0f);
         GameManager.UI.DisableAll();
-        GameManager.UI.Enable("PauseMenu");
+        GameManager.UI.Enable(ui);
     }
 
     public override void End()

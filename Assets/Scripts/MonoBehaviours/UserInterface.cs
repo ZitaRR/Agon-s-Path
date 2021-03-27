@@ -54,6 +54,16 @@ public class UserInterface : MonoBehaviour
         }
     }
 
+    public GameObject GetElement(string name)
+    {
+        foreach (var element in elements)
+        {
+            if (element.name == name)
+                return element.gameObject;
+        }
+        return null;
+    }
+
     public T GetElement<T>(string name)
     {
         foreach (var element in elements)

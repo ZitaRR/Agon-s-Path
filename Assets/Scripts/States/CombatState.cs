@@ -20,6 +20,8 @@ public sealed class CombatState : State
     {
         if (Input.GetKeyUp(KeyCode.Escape))
             StateMachine.SetState(new PauseState(this));
+        else if (Input.GetKeyUp(KeyCode.I))
+            StateMachine.SetState(new PauseState(this, "Inventory"));
 
         camera.Combat();
         player.Movement();
