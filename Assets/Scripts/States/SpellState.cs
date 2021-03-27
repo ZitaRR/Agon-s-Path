@@ -4,7 +4,7 @@ public sealed class SpellState : State
 {
     private Spell spell;
 
-    public SpellState(State previous, Spell spell) : base(previous)
+    public SpellState(Spell spell) : base()
     {
         this.spell = spell;
     }
@@ -38,9 +38,9 @@ public sealed class SpellState : State
     protected override void Update()
     {
         if (Input.GetKeyUp(KeyCode.Escape))
-            StateMachine.SetState(new PauseState(this));
+            StateMachine.SetState(new PauseState());
         else if (Input.GetKeyUp(KeyCode.I))
-            StateMachine.SetState(new PauseState(this, "Inventory"));
+            StateMachine.SetState(new PauseState("Inventory"));
 
         camera.Mouse();
         player.Movement();
@@ -51,6 +51,6 @@ public sealed class SpellState : State
         if (Input.GetKeyUp(KeyCode.Mouse0))
             spell.Spawn();
         else if (Input.GetKeyUp(spell.Key))
-            StateMachine.SetState(new IdleState(this));
+            StateMachine.SetState(StateMachine.State.Previous);
     }
 }

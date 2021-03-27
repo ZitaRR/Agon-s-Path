@@ -5,7 +5,6 @@ using UnityEngine;
 public static class CombatSystem
 {
     public static List<Entity> Entities { get; } = new List<Entity>();
-    public static bool NoEntities { get => Entities.Count <= 0; }
 
     public static bool Exists(Entity entity)
     {
@@ -23,6 +22,7 @@ public static class CombatSystem
             return;
 
         Entities.Add(entity);
+        StateMachine.SetState(new CombatState());
     }
 
     public static void RemoveCombatant(Entity entity)
@@ -31,11 +31,15 @@ public static class CombatSystem
             return;
 
         Entities.Remove(entity);
+
+        if (Entities.Count <= 0)
+            StateMachine.SetState(StateMachine.State.Previous);
     }
 
     public static void RemoveAllCombatants()
     {
         Entities.Clear();
+        StateMachine.SetState(StateMachine.State.Previous);
     }
 
     public static List<Vector2> GetPositions()

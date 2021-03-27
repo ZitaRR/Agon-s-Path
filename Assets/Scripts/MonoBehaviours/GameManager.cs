@@ -59,12 +59,12 @@ public sealed class GameManager : MonoBehaviour
 
         if (scene.name == "Menu")
         {
-            StateMachine.SetState(new MenuState(StateMachine.State?.Previous));
+            StateMachine.SetState(new MenuState());
             return;
         }
         else if (scene.name == "LoadingScene")
         {
-            StateMachine.SetState(new LoadingState(StateMachine.State?.Previous));
+            StateMachine.SetState(new LoadingState());
             return;
         }
 
@@ -72,7 +72,7 @@ public sealed class GameManager : MonoBehaviour
             .GetComponent<PlayerEntity>();
         Environment.gameObject.SetActive(true);
 
-        StateMachine.SetState(new IdleState(StateMachine.State?.Previous));
+        StateMachine.SetState(new IdleState());
     }
 
     public static void SetTime(float time, float duration = 0)

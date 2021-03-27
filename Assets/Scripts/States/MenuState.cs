@@ -4,7 +4,7 @@ using UnityEngine;
 
 public sealed class MenuState : State
 {
-    public MenuState(State previous) : base(previous)
+    public MenuState() : base()
     {
 
     }

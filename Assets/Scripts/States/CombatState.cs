@@ -4,7 +4,7 @@ using UnityEngine;
 
 public sealed class CombatState : State
 {
-    public CombatState(State previous) : base(previous)
+    public CombatState() : base()
     {
 
     }
@@ -19,9 +19,9 @@ public sealed class CombatState : State
     protected override void Update()
     {
         if (Input.GetKeyUp(KeyCode.Escape))
-            StateMachine.SetState(new PauseState(this));
+            StateMachine.SetState(new PauseState());
         else if (Input.GetKeyUp(KeyCode.I))
-            StateMachine.SetState(new PauseState(this, "Inventory"));
+            StateMachine.SetState(new PauseState("Inventory"));
 
         camera.Combat();
         player.Movement();
@@ -32,7 +32,7 @@ public sealed class CombatState : State
         foreach (Spell spell in player.Spells)
         {
             if (Input.GetKeyUp(spell.Key))
-                StateMachine.SetState(new SpellState(this, spell));
+                StateMachine.SetState(new SpellState(spell));
         }
     }
 }

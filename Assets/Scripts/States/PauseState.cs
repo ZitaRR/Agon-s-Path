@@ -6,7 +6,7 @@ public sealed class PauseState : State
 {
     private string ui;
 
-    public PauseState(State previous, string ui = "PauseMenu") : base(previous)
+    public PauseState(string ui = "PauseMenu") : base()
     {
         this.ui = ui;
     }

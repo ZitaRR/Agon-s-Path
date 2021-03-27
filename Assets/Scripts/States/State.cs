@@ -10,11 +10,11 @@ public abstract class State
     protected PlayerEntity player;
     protected CameraBehaviour camera;
 
-    public State(State previous)
+    public State()
     {
         Name = GetType().Name.Replace("State", "");
 
-        Previous = previous;
+        Previous = StateMachine.State;
         player = GameManager.Player;
         camera = GameManager.Camera;
     }
