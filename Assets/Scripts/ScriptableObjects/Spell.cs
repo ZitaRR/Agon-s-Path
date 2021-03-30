@@ -4,9 +4,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Spell", menuName = "Agon's Path/Spell")]
 public class Spell : ScriptableObject
 {
-    public Color Colour { get => colour; }
-
-    public Entity Entity { get; private set; }
     public KeyCode Key { get => key; }
 
     [SerializeField]
@@ -22,21 +19,16 @@ public class Spell : ScriptableObject
     [SerializeField]
     private KeyCode key;
 
-    public void Initialize(Entity entity)
+    public void Spawn(Entity entity)
     {
-        Entity = entity;
-    }
-
-    public void Spawn()
-    {
-        if (!Entity.Mana.Decrease(cost))
+        if (!entity.Mana.Decrease(cost))
             return;
 
-        var projectile = MonoBehaviour.Instantiate(spell, Entity.transform.position, Quaternion.identity)
+        var projectile = MonoBehaviour.Instantiate(spell, entity.transform.position, Quaternion.identity)
             .GetComponent<Projectile>();
         projectile.Initialize(
             CameraBehaviour.MouseWorldPosition,
-            damage * Entity.SpellMulitplier.TotalValue,
+            damage * entity.SpellMulitplier.TotalValue,
             colour);
     }
 }
