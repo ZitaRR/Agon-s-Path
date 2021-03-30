@@ -17,7 +17,7 @@ public sealed class PauseState : State
 
         GameManager.SetTime(0f);
         GameManager.UI.DisableAll();
-        GameManager.UI.Enable(ui);
+        GameManager.UI.EnableSelfAndChildren(ui);
     }
 
     public override void End()

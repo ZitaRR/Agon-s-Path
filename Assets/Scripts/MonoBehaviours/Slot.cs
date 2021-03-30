@@ -38,14 +38,11 @@ public sealed class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         if (!hover)
             return;
 
-        int x = Screen.width / 2;
-        float offset = (description.transform as RectTransform).rect.width + 10f;
+        var x = Input.mousePosition.x < Screen.width / 2
+            ? Input.mousePosition.x + Screen.width / 6
+            : Input.mousePosition.x - Screen.width / 6;
 
-        if (x < Input.mousePosition.x)
-            offset = -offset;
-
-        position = new Vector3(Input.mousePosition.x - offset, Input.mousePosition.y, 0f);
-        description.transform.position = position;
+        description.transform.position = new Vector3(x, Input.mousePosition.y);
     }
 
     public void Use()

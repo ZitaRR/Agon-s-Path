@@ -5,21 +5,25 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
     [SerializeField]
-    private Slot[] slots;
+    private Slot[] equippedSlots;
+    [SerializeField]
+    private Slot[] inventorySlots;
 
     private void Start()
     {
-        Transform ui = GameManager.UI.gameObject.transform;
-        slots = ui.GetComponentsInChildren<Slot>(true);
+        equippedSlots = GameManager.UI.GetElement("EquippedSlots")
+            .GetComponentsInChildren<Slot>(true);
+        inventorySlots = GameManager.UI.GetElement("InventorySlots")
+            .GetComponentsInChildren<Slot>(true);
     }
 
     public void AddItem(Sprite item)
     {
-        for (int i = 0; i < slots.Length; i++)
+        for (int i = 0; i < inventorySlots.Length; i++)
         {
-            if (slots[i] is null)
+            if (inventorySlots[i] is null)
             {
-                slots[i].Add(item);
+                inventorySlots[i].Add(item);
                 return;
             }
         }
