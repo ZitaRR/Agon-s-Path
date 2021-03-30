@@ -6,11 +6,14 @@ using UnityEngine.EventSystems;
 
 public sealed class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    public bool IsEmpty { get => image.sprite is null; }
+
     private Image image;
     private GameObject description;
     private Text title;
     private Text info;
     private Vector3 position;
+    private bool hover;
 
     [SerializeField]
     private Button slot;
@@ -28,6 +31,21 @@ public sealed class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
         slot.onClick.AddListener(Use);
         remove.onClick.AddListener(() => Remove());
+    }
+
+    private void Update()
+    {
+        if (!hover)
+            return;
+
+        int x = Screen.width / 2;
+        float offset = (description.transform as RectTransform).rect.width + 10f;
+
+        if (x < Input.mousePosition.x)
+            offset = -offset;
+
+        position = new Vector3(Input.mousePosition.x - offset, Input.mousePosition.y, 0f);
+        description.transform.position = position;
     }
 
     public void Use()
@@ -54,26 +72,27 @@ public sealed class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         image.sprite = null;
         image.enabled = false;
         remove.image.enabled = false;
+        GameManager.UI.Disable("SlotDescription");
         return true;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (image.sprite is null)
+            return;
+
         GameManager.UI.Enable("SlotDescription");
         title.text = image.sprite.name;
         info.text = $"Texture name: {image.sprite.name}";
-
-        bool left = Screen.width / 2 < Input.mousePosition.x;
-        position = new Vector3(
-            Input.mousePosition.x + (left ? -200f : 200f),
-            Input.mousePosition.y,
-            0f);
-
-        description.transform.position = position;
+        hover = true;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (image.sprite is null)
+            return;
+
         GameManager.UI.Disable("SlotDescription");
+        hover = false;
     }
 }

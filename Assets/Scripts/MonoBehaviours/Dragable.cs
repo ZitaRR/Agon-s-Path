@@ -20,6 +20,7 @@ public sealed class Dragable : MonoBehaviour, IDragHandler, IDropHandler, IBegin
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        GameManager.UI.Disable("SlotDescription");
         transform.SetParent(GameManager.UI.transform);
     }
 

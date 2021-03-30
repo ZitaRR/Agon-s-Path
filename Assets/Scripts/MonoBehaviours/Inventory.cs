@@ -24,24 +24,4 @@ public class Inventory : MonoBehaviour
             }
         }
     }
-
-    public void RemoveItem(Sprite item)
-    {
-        for (int i = 0; i < slots.Length; i++)
-        {
-            if (slots[i].name == item.name)
-            {
-                slots[i] = null;
-                return;
-            }
-        }
-    }
-
-    public void RemoveItem(int index)
-    {
-        if (slots[index] is null)
-            return;
-
-        slots[index] = null;
-    }
 }

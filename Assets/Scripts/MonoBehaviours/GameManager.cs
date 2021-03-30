@@ -14,6 +14,7 @@ public sealed class GameManager : MonoBehaviour
     public static PlayerEntity Player { get; private set; }
     public static CameraBehaviour Camera { get; private set; }
     public static UserInterface UI { get; private set; }
+    public static Inventory Inventory { get; private set; }
 
     [SerializeField]
     private GameObject player;
@@ -70,6 +71,7 @@ public sealed class GameManager : MonoBehaviour
 
         Player = Instantiate(player, SceneLoader.StartPosition, Quaternion.identity)
             .GetComponent<PlayerEntity>();
+        Inventory = Player.GetComponent<Inventory>();
         Environment.gameObject.SetActive(true);
 
         StateMachine.SetState(new IdleState());
