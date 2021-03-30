@@ -9,11 +9,6 @@ public sealed class PlayerEntity : Entity
     {
         base.Awake();
         light = GetComponentInChildren<Light2D>();
-
-        foreach (var spell in spells)
-        {
-            spell.Initialize(this);
-        }
     }
 
     protected override void Update()

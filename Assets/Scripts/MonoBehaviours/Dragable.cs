@@ -20,12 +20,18 @@ public sealed class Dragable : MonoBehaviour, IDragHandler, IDropHandler, IBegin
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (slot.IsEmpty)
+            return;
+
         GameManager.UI.Disable("SlotDescription");
         transform.SetParent(GameManager.UI.transform);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (slot.IsEmpty)
+            return;
+
         image.transform.position = Input.mousePosition;
     }
 
@@ -44,7 +50,7 @@ public sealed class Dragable : MonoBehaviour, IDragHandler, IDropHandler, IBegin
 
         var slot = results[0].gameObject.GetComponentInParent<Slot>();
 
-        if (!slot || !slot.Add(image.sprite))
+        if (!slot || !slot.Add(this.slot.Item))
             return;
 
         this.slot.Remove();

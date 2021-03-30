@@ -6,13 +6,33 @@ using UnityEngine.EventSystems;
 
 public sealed class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public bool IsEmpty { get => image.sprite is null; }
+    public Item Item
+    {
+        get => item;
+        private set
+        {
+            item = value;
+
+            if(item is null)
+            {
+                image.enabled = false;
+                remove.image.enabled = false;
+                GameManager.UI.Disable("SlotDescription");
+                return;
+            }
+
+            image.sprite = item.Sprite;
+            image.enabled = true;
+            remove.image.enabled = true;
+        }
+    }
+    public bool IsEmpty { get => Item is null; }
 
     private Image image;
     private GameObject description;
     private Text title;
     private Text info;
-    private Vector3 position;
+    private Item item;
     private bool hover;
 
     [SerializeField]
@@ -24,6 +44,9 @@ public sealed class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         image = transform.GetChild(0).GetChild(0).GetComponent<Image>();
         description = GameManager.UI.GetElement("SlotDescription");
+
+        if (Item is null)
+            remove.image.enabled = false;
 
         Text[] texts = description.GetComponentsInChildren<Text>(true);
         title = texts[0];
@@ -50,32 +73,27 @@ public sealed class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     }
 
-    public bool Add(Sprite sprite)
+    public bool Add(Item item)
     {
-        if (image.sprite != null)
+        if (!IsEmpty)
             return false;
 
-        image.sprite = sprite;
-        image.enabled = true;
-        remove.image.enabled = true;
+        Item = item;
         return true;
     }
 
     public bool Remove()
     {
-        if (image is null)
+        if (IsEmpty)
             return false;
 
-        image.sprite = null;
-        image.enabled = false;
-        remove.image.enabled = false;
-        GameManager.UI.Disable("SlotDescription");
+        Item = null;
         return true;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (image.sprite is null)
+        if (IsEmpty)
             return;
 
         GameManager.UI.Enable("SlotDescription");
@@ -86,7 +104,7 @@ public sealed class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (image.sprite is null)
+        if (IsEmpty)
             return;
 
         GameManager.UI.Disable("SlotDescription");

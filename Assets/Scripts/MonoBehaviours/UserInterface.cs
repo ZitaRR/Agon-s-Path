@@ -25,7 +25,7 @@ public class UserInterface : MonoBehaviour
     {
         foreach (var element in elements)
         {
-            if(element.name == name)
+            if (element.name == name)
             {
                 element.gameObject.SetActive(true);
                 SetChildren(element.transform, true);

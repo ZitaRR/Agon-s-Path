@@ -49,7 +49,7 @@ public sealed class SpellState : State
             End();
 
         if (Input.GetKeyUp(KeyCode.Mouse0))
-            spell.Spawn();
+            spell.Spawn(player);
         else if (Input.GetKeyUp(spell.Key))
             StateMachine.SetState(StateMachine.State.Previous);
     }

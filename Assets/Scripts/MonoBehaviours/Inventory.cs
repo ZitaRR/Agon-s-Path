@@ -17,11 +17,11 @@ public class Inventory : MonoBehaviour
             .GetComponentsInChildren<Slot>(true);
     }
 
-    public void AddItem(Sprite item)
+    public void AddItem(Item item)
     {
         for (int i = 0; i < inventorySlots.Length; i++)
         {
-            if (inventorySlots[i] is null)
+            if (inventorySlots[i].IsEmpty)
             {
                 inventorySlots[i].Add(item);
                 return;
