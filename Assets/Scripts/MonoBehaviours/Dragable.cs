@@ -50,7 +50,9 @@ public sealed class Dragable : MonoBehaviour, IDragHandler, IDropHandler, IBegin
 
         var slot = results[0].gameObject.GetComponentInParent<Slot>();
 
-        if (!slot || !slot.Add(this.slot.Item))
+        if (!slot || slot.Type != Item.ItemType.None && slot.Type != this.slot.Item.Type)
+            return;
+        else if (!slot.Add(this.slot.Item))
             return;
 
         this.slot.Remove();

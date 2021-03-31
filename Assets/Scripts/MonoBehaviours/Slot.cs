@@ -26,9 +26,9 @@ public sealed class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             remove.image.enabled = true;
         }
     }
+    public Item.ItemType Type { get => type; }
     public bool IsEmpty { get => Item is null; }
 
-    private Image image;
     private GameObject description;
     private Text title;
     private Text info;
@@ -39,10 +39,13 @@ public sealed class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private Button slot;
     [SerializeField]
     private Button remove;
+    [SerializeField]
+    private Image image;
+    [SerializeField]
+    private Item.ItemType type;
 
     private void Start()
     {
-        image = transform.GetChild(0).GetChild(0).GetComponent<Image>();
         description = GameManager.UI.GetElement("SlotDescription");
 
         if (Item is null)
@@ -70,7 +73,11 @@ public sealed class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void Use()
     {
+        if (IsEmpty)
+            return;
 
+        Item.Use();
+        Remove();
     }
 
     public bool Add(Item item)
@@ -97,8 +104,8 @@ public sealed class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             return;
 
         GameManager.UI.Enable("SlotDescription");
-        title.text = image.sprite.name;
-        info.text = $"Texture name: {image.sprite.name}";
+        title.text = item.Name;
+        info.text = item.Description;
         hover = true;
     }
 
