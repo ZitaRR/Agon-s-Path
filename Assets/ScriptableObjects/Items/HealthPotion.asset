@@ -10,8 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 82a0bb1d561ac534ba95629e82d1dd61, type: 3}
-  m_Name: Health Potion
+  m_Name: HealthPotion
   m_EditorClassIdentifier: 
-  name: 
-  sprite: {fileID: 0}
-  type: 0
+  name: Health Potion
+  description: 'A potion with magical powers.
+
+    It emits a strange feeling, though
+    a comforting one.'
+  sprite: {fileID: 3994805371664618572, guid: 8e061020c5dc6674e8e1855953156a3d, type: 3}
+  type: 1
